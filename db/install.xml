@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/livewebinar/db" VERSION="20160401" COMMENT="livewebinar module"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+    <TABLES>
+        <TABLE NAME="livewebinar" COMMENT="livewebinar widgets">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="user_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Moodle user that this widget belongs to."/>
+                <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Moodle course that this widget belongs to."/>
+                <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+                <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="false" SEQUENCE="false" COMMENT="Format of description field"/>
+                <FIELD NAME="widget_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="created_at" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="ISO datetime format"/>
+                <FIELD NAME="name" TYPE="char" LENGTH="300" NOTNULL="true" SEQUENCE="false" COMMENT="Meeting topic. Max of 300 characters."/>
+                <FIELD NAME="start_time" TYPE="int" LENGTH="12" NOTNULL="false" SEQUENCE="false" COMMENT="Meeting start time (Unix timestamp, seconds). For scheduled meeting only."/>
+                <FIELD NAME="timemodified" TYPE="int" LENGTH="12" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp when the instance was last modified."/>
+                <FIELD NAME="strict_event" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Whether participants can enter room before event start or after event end"/>
+                <FIELD NAME="lock_state" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="Is room initially locked"/>
+                <FIELD NAME="not_scheduled_event" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="No time schedule"/>
+                <FIELD NAME="duration" TYPE="int" LENGTH="6" NOTNULL="false" SEQUENCE="false" COMMENT="Meeting duration (seconds). For scheduled meeting only."/>
+                <FIELD NAME="timezone" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="Timezone to format start_time, like &quot;America/Los_Angeles&quot;. For scheduled meeting only."/>
+                <FIELD NAME="password" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Meeting password. Password may only contain the following characters: [a-zA-Z0-9@-_*]. Max of 10 characters"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
+            <INDEXES>
+                <INDEX NAME="widget_id_idx" UNIQUE="false" FIELDS="widget_id"/>
+            </INDEXES>
+        </TABLE>
+        <TABLE NAME="livewebinar_users" COMMENT="livewebinar users">
+            <FIELDS>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="user_id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="client_id" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="client_secret" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+                <FIELD NAME="username" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+                <FIELD NAME="password" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+            </KEYS>
+            <INDEXES>
+                <INDEX NAME="user_id_idx" UNIQUE="true" FIELDS="user_id"/>
+            </INDEXES>            
+        </TABLE>
+    </TABLES>
+</XMLDB>
