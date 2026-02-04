@@ -38,10 +38,9 @@ use core_privacy\local\request\writer;
  * Privacy provider for mod_livewebinar.
  */
 class provider implements
-        \core_privacy\local\metadata\provider,
-        \core_privacy\local\request\plugin\provider,
-        \core_privacy\local\request\core_userlist_provider {
-
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\core_userlist_provider,
+    \core_privacy\local\request\plugin\provider {
     /**
      * Returns metadata about this plugin's storage.
      *
@@ -261,7 +260,7 @@ class provider implements
         }
 
         if ($context->contextlevel === CONTEXT_SYSTEM) {
-            list($insql, $inparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
+            [$insql, $inparams] = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
             $DB->delete_records_select('livewebinar_users', "user_id $insql", $inparams);
             return;
         }
@@ -275,7 +274,7 @@ class provider implements
             return;
         }
 
-        list($insql, $inparams) = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
+        [$insql, $inparams] = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED);
         $params = array_merge(['id' => $instanceid], $inparams);
         $DB->set_field_select('livewebinar', 'user_id', 0, "id = :id AND user_id $insql", $params);
     }
