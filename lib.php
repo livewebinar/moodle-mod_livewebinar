@@ -255,12 +255,7 @@ function livewebinar_update_auth_item(stdClass $auth) {
  * @return void
  */
 function livewebinar_print_error($error, int $fromapirtc = 0, array $csett = []) {
-    global $CFG, $COURSE, $OUTPUT, $PAGE;
-
-    $fromrtc = '';
-    if ($fromapirtc) {
-        $fromrtc = ' Api RTC';
-    }
+    global $COURSE;
 
     if (isset($_SERVER['HTTP_REFERER'])) {
         $nexturl = clean_param($_SERVER['HTTP_REFERER'], PARAM_LOCALURL);
@@ -268,23 +263,11 @@ function livewebinar_print_error($error, int $fromapirtc = 0, array $csett = [])
         $nexturl = course_get_url($COURSE->id);
     }
 
-    $PAGE->set_title(get_string('error'));
-    $PAGE->set_heading($COURSE->fullname);
-    echo $OUTPUT->header();
-
-    echo $OUTPUT->notification('<strong>' . get_string('error') . $fromrtc . ':</strong> ' . $error, 'notifytiny');
-    if ($CFG->debugdeveloper) {
-        echo $OUTPUT->notification('<strong>Stack trace:</strong> ' . format_backtrace(), 'notifytiny');
-        if (count($csett)) {
-            $curlsettings = json_encode($csett, JSON_PRETTY_PRINT);
-            if ($curlsettings === false) {
-                $curlsettings = '';
-            }
-            $curlsettings = s($curlsettings);
-            echo $OUTPUT->notification('<strong>RTC cURL request:</strong><pre>' . $curlsettings . '</pre>');
-        }
+    $errorcode = $fromapirtc ? 'error_apirtc' : 'error_api';
+    $debuginfo = null;
+    if (!empty($csett)) {
+        $debuginfo = json_encode($csett, JSON_PRETTY_PRINT);
     }
-    echo $OUTPUT->continue_button($nexturl);
-    echo $OUTPUT->footer();
-    exit(1);
+
+    throw new moodle_exception($errorcode, 'mod_livewebinar', $nexturl, $error, $debuginfo);
 }
