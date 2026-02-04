@@ -83,6 +83,8 @@ $open = get_string('open', 'mod_livewebinar');
 $recordings = get_string('recordings', 'mod_livewebinar');
 $genreportstr = get_string('gen_report', 'mod_livewebinar');
 $reportqueuedstr = get_string('report_will_be_emailed', 'mod_livewebinar');
+$strroomid = get_string('roomid', 'mod_livewebinar');
+$strapppanel = get_string('app_panel', 'mod_livewebinar');
 
 $starttime = userdate($livewebinar->start_time, '%Y-%m-%d %H:%M:%S');
 
@@ -102,7 +104,7 @@ $table->align = ['right', 'left'];
 $table->width = '100%';
 $table->size = ['15%', '80%'];
 $table->data[] = [$strdescr . ':', $livewebinar->intro];
-$table->data[] = ['Room ID:', $widget->token];
+$table->data[] = [$strroomid . ':', $widget->token];
 $table->data[] = [$strtime . ':', $strtimevalue];
 $table->data[] = [$strpassword . ':', $widget->password];
 echo html_writer::table($table);
@@ -155,7 +157,7 @@ if ($isadmin || $ismanager) {
 
     // App panel.
     $applink = $PAGE->url . '&appautologin=1';
-    echo '<hr><a href="' . $applink . '" target="_blank">App Panel</a><br/>';
+    echo '<hr><a href="' . $applink . '" target="_blank">' . $strapppanel . '</a><br/>';
 }
 
 // Recording list.
