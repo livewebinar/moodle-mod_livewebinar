@@ -66,7 +66,7 @@ class mod_livewebinar_mod_form extends moodleform_mod {
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 300), 'maxlength', 300, 'client');
 
-        // Add description ('intro' and 'introformat').
+        // Add description (intro and introformat).
         $this->standard_intro_elements();
 
         // Add open event.
@@ -120,8 +120,12 @@ class mod_livewebinar_mod_form extends moodleform_mod {
         $mform->addElement('hidden', 'user_id', $userid);
         $mform->setType('user_id', PARAM_INT);
         $mform->addElement('header', 'authorization', get_string('authorization', 'mod_livewebinar'));
-        $mform->addElement('static', 'livewebinarcredentialsinfo', '',
-            get_string('credentials_managed_globally', 'mod_livewebinar'));
+        $mform->addElement(
+            'static',
+            'livewebinarcredentialsinfo',
+            '',
+            get_string('credentials_managed_globally', 'mod_livewebinar')
+        );
         $this->add_action_buttons();
     }
 
@@ -159,5 +163,4 @@ class mod_livewebinar_mod_form extends moodleform_mod {
 
         return $errors;
     }
-
 }

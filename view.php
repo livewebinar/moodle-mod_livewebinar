@@ -26,6 +26,7 @@ require_once(__DIR__ . '/locallib.php');
 require_once(__DIR__ . '/../../lib/moodlelib.php');
 
 [$course, $cm, $livewebinar] = livewebinar_get_instance_setup();
+require_login($course, true, $cm);
 
 $context = context_module::instance($cm->id);
 $ismanager = has_capability('mod/livewebinar:addinstance', $context);

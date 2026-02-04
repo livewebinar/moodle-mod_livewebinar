@@ -46,8 +46,12 @@ class mod_livewebinar_user_form extends moodleform {
         $mform->addElement('hidden', 'user_id', $userid);
         $mform->setType('user_id', PARAM_INT);
 
-        $mform->addElement('static', 'livewebinarcredentialsinfo', '',
-            get_string('credentials_managed_globally', 'mod_livewebinar'));
+        $mform->addElement(
+            'static',
+            'livewebinarcredentialsinfo',
+            '',
+            get_string('credentials_managed_globally', 'mod_livewebinar')
+        );
     }
 
     /**
