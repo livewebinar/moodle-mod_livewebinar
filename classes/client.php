@@ -53,6 +53,69 @@ class mod_livewebinar_client {
     private string $api_url = "https://api.archiebot.com/api";
 
     /**
+     * Prepare options for Moodle curl wrapper from legacy curl settings.
+     *
+     * @param array $csett
+     * @return array
+     */
+    private function prepare_curl_options(array $csett): array {
+        $map = [
+            CURLOPT_RETURNTRANSFER => 'CURLOPT_RETURNTRANSFER',
+            CURLOPT_ENCODING => 'CURLOPT_ENCODING',
+            CURLOPT_MAXREDIRS => 'CURLOPT_MAXREDIRS',
+            CURLOPT_TIMEOUT => 'CURLOPT_TIMEOUT',
+            CURLOPT_HTTP_VERSION => 'CURLOPT_HTTP_VERSION',
+            CURLOPT_HTTPHEADER => 'CURLOPT_HTTPHEADER',
+            CURLOPT_HEADER => 'CURLOPT_HEADER',
+            CURLOPT_FOLLOWLOCATION => 'CURLOPT_FOLLOWLOCATION',
+        ];
+        $options = [];
+        foreach ($map as $const => $name) {
+            if (array_key_exists($const, $csett)) {
+                $options[$name] = $csett[$const];
+            }
+        }
+        return $options;
+    }
+
+    /**
+     * Execute an HTTP request using Moodle's curl wrapper.
+     *
+     * @param array $csett
+     * @return array Array of [$response, $error, $info]
+     */
+    private function execute_request(array $csett): array {
+        global $CFG;
+        require_once($CFG->libdir . '/filelib.php');
+
+        $url = $csett[CURLOPT_URL] ?? '';
+        $method = strtoupper($csett[CURLOPT_CUSTOMREQUEST] ?? 'GET');
+        $params = $csett[CURLOPT_POSTFIELDS] ?? null;
+        $options = $this->prepare_curl_options($csett);
+
+        $curl = new curl();
+        switch ($method) {
+            case 'POST':
+                $response = $curl->post($url, $params, $options);
+                break;
+            case 'PUT':
+                $response = $curl->put($url, $params, $options);
+                break;
+            case 'DELETE':
+                $response = $curl->delete($url, $params ?? [], $options);
+                break;
+            case 'GET':
+            default:
+                $response = $curl->get($url, is_array($params) ? $params : [], $options);
+                break;
+        }
+
+        $err = $curl->error;
+        $info = $curl->get_info();
+        return [$response, $err, $info];
+    }
+
+    /**
      * Fetch a config value from provided config structure.
      *
      * @param stdClass|array $config
@@ -155,8 +218,6 @@ class mod_livewebinar_client {
             return $access_token;
         }
 
-        $curl = curl_init();
-
         $csett = array(
                 CURLOPT_URL => $this->api_url."/auth/login",
                 CURLOPT_RETURNTRANSFER => true,
@@ -174,12 +235,7 @@ class mod_livewebinar_client {
                     "Accept: application/vnd.archiebot.v1+json"
                 ), $config, $silent),
                 );
-        curl_setopt_array($curl, $csett); 
-
-        $jsonresponse = curl_exec($curl);
-        $err = curl_error($curl);
-
-        curl_close($curl);
+        [$jsonresponse, $err] = $this->execute_request($csett);
 
         if ($err) {
             $this->lasterror = $err;
@@ -207,7 +263,6 @@ class mod_livewebinar_client {
 
     public function widget_create($config, $widget, $user_id) {
         $token = $this->access_token($config);
-        $curl = curl_init();
 
         if (!$widget->not_scheduled_event) {
             $start_time = userdate($widget->start_time, '%Y-%m-%d %H:%M:%S');
@@ -247,13 +302,7 @@ class mod_livewebinar_client {
                     "content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW"
                     ), $config),
                 );
-        curl_setopt_array($curl, $csett); 
-
-
-        $jsonresponse = curl_exec($curl);
-        $err = curl_error($curl);
-
-        curl_close($curl);
+        [$jsonresponse, $err] = $this->execute_request($csett);
 
         if ($err) {
             $this->lasterror = $err;
@@ -291,7 +340,6 @@ class mod_livewebinar_client {
         }
 
         $token = $this->access_token($config);
-        $curl = curl_init();
 
         $csett = array(
                 CURLOPT_URL => $this->api_url."/widgets/" . $widget->widget_id,
@@ -308,12 +356,7 @@ class mod_livewebinar_client {
                     "Content-Type: application/x-www-form-urlencoded"
                     ), $config),
                 );
-        curl_setopt_array($curl, $csett); 
-
-        $jsonresponse = curl_exec($curl);
-        $err = curl_error($curl);
-
-        curl_close($curl);
+        [$jsonresponse, $err] = $this->execute_request($csett);
 
 
         if ($err) {
@@ -338,7 +381,6 @@ class mod_livewebinar_client {
 
     public function generate_widget_token($config, $widget, $widget_id, $user_id) {
         $token = $this->access_token($config);
-        $curl = curl_init();
 
         $csett = array(
             CURLOPT_URL => $this->api_url."/account/widget_tokens",
@@ -354,10 +396,7 @@ class mod_livewebinar_client {
                 "Accept: application/vnd.archiebot.v1+json"
             ), $config),
         );
-        curl_setopt_array($curl, $csett);
-        $jsonresponse = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
+        [$jsonresponse, $err] = $this->execute_request($csett);
 
         if ($err) {
             $this->lasterror = $err;
@@ -383,7 +422,6 @@ class mod_livewebinar_client {
 
     public function generate_user_widget_token($config, $widgetToken, $widget_id, $user_id) {
         $token = $this->access_token($config);
-        $curl = curl_init();
         $csett = array(
             CURLOPT_URL => $this->api_url."/account/widget_tokens/items/generate/".$widgetToken->id,
             CURLOPT_RETURNTRANSFER => true,
@@ -398,10 +436,7 @@ class mod_livewebinar_client {
                 "Accept: application/vnd.archiebot.v1+json"
             ), $config),
         );
-        curl_setopt_array($curl, $csett);
-        $jsonresponse = curl_exec($curl);
-        $err = curl_error($curl);
-        curl_close($curl);
+        [$jsonresponse, $err] = $this->execute_request($csett);
 
         if ($err) {
             $this->lasterror = $err;
@@ -442,7 +477,6 @@ class mod_livewebinar_client {
         $cache->delete($widget_id);
 
         $token = $this->access_token($config);
-        $curl = curl_init();
 
         $csett = array(
                 CURLOPT_URL => $this->api_url."/widgets/$widget_id",
@@ -459,12 +493,7 @@ class mod_livewebinar_client {
                     "Content-Type: application/x-www-form-urlencoded"
                     ), $config),
                 );
-        curl_setopt_array($curl, $csett); 
-
-        $jsonresponse = curl_exec($curl);
-        $err = curl_error($curl);
-
-        curl_close($curl);
+        [$jsonresponse, $err] = $this->execute_request($csett);
 
 
         if ($err) {
@@ -501,7 +530,6 @@ class mod_livewebinar_client {
         }
 
         $token = $this->access_token($config);
-        $curl = curl_init();
 
         $csett = array(
                 CURLOPT_URL => $this->api_url."/widgets/$widget_id",
@@ -516,12 +544,7 @@ class mod_livewebinar_client {
                     "Accept: application/vnd.archiebot.v1+json"
                     ), $config),
                 );
-        curl_setopt_array($curl, $csett); 
-
-        $jsonresponse = curl_exec($curl);
-        $err = curl_error($curl);
-
-        curl_close($curl);
+        [$jsonresponse, $err] = $this->execute_request($csett);
 
         if ($err) {
             $this->lasterror = $err;
@@ -546,7 +569,6 @@ class mod_livewebinar_client {
         if (($recordings = $cache->get($widget_id))) {
             return $recordings;
         }
-        $curl = curl_init();
         $token = $this->access_token($config);
         $csett = array(
                 CURLOPT_URL => $this->api_url."/widgets/$widget_id/recordings?limit=100",
@@ -561,14 +583,7 @@ class mod_livewebinar_client {
                     "Accept: application/vnd.archiebot.v1+json"
                     ), $config),
                 );
-
-
-        curl_setopt_array($curl, $csett); 
-
-        $jsonresponse = curl_exec($curl);
-        $err = curl_error($curl);
-
-        curl_close($curl);
+        [$jsonresponse, $err] = $this->execute_request($csett);
 
         if ($err) {
             $this->lasterror = $err;
@@ -619,8 +634,6 @@ class mod_livewebinar_client {
 
         $token = $this->access_token($config);
 
-        $curl = curl_init();
-
         $csett = array(
                 CURLOPT_URL => $this->api_url."/reports/widget/{$widget_id}/event/xls{$delTxt}",
                 CURLOPT_RETURNTRANSFER => true,
@@ -635,12 +648,7 @@ class mod_livewebinar_client {
                     "Accept: application/vnd.archiebot.v1+json"
                     ), $config),
                 );
-        curl_setopt_array($curl, $csett); 
-
-        $jsonresponse = curl_exec($curl);
-        $err = curl_error($curl);
-
-        curl_close($curl);
+        [$jsonresponse, $err] = $this->execute_request($csett);
 
         if ($err) {
             $this->lasterror = $err;
@@ -662,7 +670,6 @@ class mod_livewebinar_client {
     public function create_report($config, $widget_id) {
 
         $token = $this->access_token($config);
-        $curl = curl_init();
 
         $csett = array(
                 CURLOPT_URL => $this->api_url."/reports",
@@ -683,12 +690,7 @@ class mod_livewebinar_client {
                     "content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW"
                     ), $config),
                 );
-        curl_setopt_array($curl, $csett); 
-
-        $jsonresponse = curl_exec($curl);
-        $err = curl_error($curl);
-
-        curl_close($curl);
+        [$jsonresponse, $err] = $this->execute_request($csett);
 
         if ($err) {
             $this->lasterror = $err;
@@ -718,7 +720,6 @@ class mod_livewebinar_client {
         $token = $this->access_token($config);
         $apiurl = rtrim($this->api_url, '/') . '/users/autologinToken';
 
-        $curl = curl_init();
         $csett = array(
             CURLOPT_URL => $apiurl,
             CURLOPT_RETURNTRANSFER => true,
@@ -734,15 +735,11 @@ class mod_livewebinar_client {
                 "Accept: application/vnd.archiebot.v1+json"
             ), $config),
         );
-        curl_setopt_array($curl, $csett);
-
-        $rawresponse = curl_exec($curl);
-        $err = curl_error($curl);
-        $httpcode = (int)curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        $contenttype = (string)curl_getinfo($curl, CURLINFO_CONTENT_TYPE);
-        $redirecturl = (string)curl_getinfo($curl, CURLINFO_REDIRECT_URL);
-        $headersize = (int)curl_getinfo($curl, CURLINFO_HEADER_SIZE);
-        curl_close($curl);
+        [$rawresponse, $err, $info] = $this->execute_request($csett);
+        $httpcode = (int)($info['http_code'] ?? 0);
+        $contenttype = (string)($info['content_type'] ?? '');
+        $redirecturl = (string)($info['redirect_url'] ?? '');
+        $headersize = (int)($info['header_size'] ?? 0);
 
         if ($err) {
             $this->lasterror = $err;
@@ -768,15 +765,11 @@ class mod_livewebinar_client {
                     $prefix = $base['scheme'] . '://' . $base['host'];
                     $location = $prefix . '/' . ltrim($location, '/');
                 }
-                $curl = curl_init();
                 $csett[CURLOPT_URL] = $location;
                 $csett[CURLOPT_HEADER] = false;
-                curl_setopt_array($curl, $csett);
-                $rawresponse = curl_exec($curl);
-                $err = curl_error($curl);
-                $httpcode = (int)curl_getinfo($curl, CURLINFO_HTTP_CODE);
-                $contenttype = (string)curl_getinfo($curl, CURLINFO_CONTENT_TYPE);
-                curl_close($curl);
+                [$rawresponse, $err, $info] = $this->execute_request($csett);
+                $httpcode = (int)($info['http_code'] ?? 0);
+                $contenttype = (string)($info['content_type'] ?? '');
                 if ($err) {
                     $this->lasterror = $err;
                     livewebinar_print_error($err);
