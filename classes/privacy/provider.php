@@ -37,10 +37,7 @@ use core_privacy\local\request\writer;
 /**
  * Privacy provider for mod_livewebinar.
  */
-class provider implements
-    \core_privacy\local\metadata\provider,
-    \core_privacy\local\request\core_userlist_provider,
-    \core_privacy\local\request\plugin\provider {
+class provider implements \core_privacy\local\metadata\provider, \core_privacy\local\request\core_userlist_provider, \core_privacy\local\request\plugin\provider {
     /**
      * Returns metadata about this plugin's storage.
      *
