@@ -110,5 +110,4 @@ class restore_livewebinar_activity_task extends restore_activity_task {
 
         return $rules;
     }
-
 }

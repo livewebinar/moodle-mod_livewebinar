@@ -67,7 +67,7 @@ function livewebinar_supports($feature) {
  * of the new instance.
  *
  * @param stdClass $livewebinar Submitted data from the form in mod_form.php
- * @param mod_livewebinar_mod_form $mform The form instance itself (if needed)
+ * @param mod_livewebinar_mod_form|null $mform The form instance itself (if needed)
  * @return int The id of the newly inserted livewebinar record
  */
 function livewebinar_add_instance(stdClass $livewebinar, ?mod_livewebinar_mod_form $mform = null) {
@@ -111,7 +111,7 @@ function livewebinar_add_instance(stdClass $livewebinar, ?mod_livewebinar_mod_fo
  * will update an existing instance with new data.
  *
  * @param stdClass $livewebinar An object from the form in mod_form.php
- * @param mod_livewebinar_mod_form $mform The form instance itself (if needed)
+ * @param mod_livewebinar_mod_form|null $mform The form instance itself (if needed)
  * @return boolean Success/Fail
  */
 function livewebinar_update_instance(stdClass $livewebinar, ?mod_livewebinar_mod_form $mform = null) {

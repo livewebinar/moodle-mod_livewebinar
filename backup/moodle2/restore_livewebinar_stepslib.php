@@ -72,5 +72,4 @@ class restore_livewebinar_activity_structure_step extends restore_activity_struc
         // Add livewebinar related files, no need to match by itemname (just internally handled context).
         $this->add_related_files('mod_livewebinar', 'intro', null);
     }
-
 }

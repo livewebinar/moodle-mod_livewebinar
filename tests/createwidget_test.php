@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace mod_livewebinar;
+
 /**
  * Web service related unit tests.
  *
@@ -22,10 +24,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
-
-global $CFG;
-
-namespace mod_livewebinar;
 
 /**
  * PHPUnit testcase class.

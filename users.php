@@ -60,12 +60,36 @@ $extraselect = "id IN (SELECT DISTINCT userid
                  WHERE r.archetype IN ('manager', 'coursecreator', 'editingteacher', 'teacher'))";
 $extraparams = [];
 
-$usercount = get_users(false, '', false, [], 'email ASC', '', '', $page - 1, $recordsperpage,
-    'id,email,lastname,firstname', $extraselect, $extraparams);
+$usercount = get_users(
+    false,
+    '',
+    false,
+    [],
+    'email ASC',
+    '',
+    '',
+    $page - 1,
+    $recordsperpage,
+    'id,email,lastname,firstname',
+    $extraselect,
+    $extraparams
+);
 $pagecount = (int) ($usercount / $recordsperpage);
 
-$users = get_users(true, '', false, [], 'email ASC', '', '', $page - 1, $recordsperpage,
-    'id,email,lastname,firstname', $extraselect, $extraparams);
+$users = get_users(
+    true,
+    '',
+    false,
+    [],
+    'email ASC',
+    '',
+    '',
+    $page - 1,
+    $recordsperpage,
+    'id,email,lastname,firstname',
+    $extraselect,
+    $extraparams
+);
 $str = '<div class="no-overflow"><table class="admintable generaltable" id="livewebinarusers">';
 foreach ($users as $user) {
     $eicon = '<a title="' . get_string('edit') . '" href="' . $CFG->wwwroot .
@@ -86,10 +110,5 @@ if ($usercount > $recordsperpage) {
             '&amp;sesskey=' . sesskey() . "\">{$i}</a>&nbsp;&nbsp;";
     }
 }
-
-
-
-
-
 
 echo $OUTPUT->footer();

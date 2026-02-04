@@ -69,5 +69,4 @@ class backup_livewebinar_activity_task extends backup_activity_task {
 
         return $content;
     }
-
 }

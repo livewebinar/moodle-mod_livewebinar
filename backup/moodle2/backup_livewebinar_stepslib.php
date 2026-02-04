@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of the LiveWebinar plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -22,8 +21,6 @@
  * @copyright  LiveWebinar by RTCLAB Sp. z o.o.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Define the complete livewebinar structure for backup, with file and id annotations.
  *
@@ -33,7 +30,6 @@ defined('MOODLE_INTERNAL') || die;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class backup_livewebinar_activity_structure_step extends backup_activity_structure_step {
-
     /**
      * Defines the backup structure of the module.
      *
@@ -44,13 +40,31 @@ class backup_livewebinar_activity_structure_step extends backup_activity_structu
         $userinfo = $this->get_setting_value('userinfo');
 
         // Define the root element describing the livewebinar instance.
-        $livewebinar = new backup_nested_element('livewebinar', array('id'), array(
-                    'user_id', 'course', 'intro', 'introformat', 'widget_id', 'created_at', 'name', 'start_time', 'timemodified',
-                    'strict_event', 'lock_state', 'not_scheduled_event', 'duration', 'timezone', 'password'));
+        $livewebinar = new backup_nested_element(
+            'livewebinar',
+            ['id'],
+            [
+                'user_id',
+                'course',
+                'intro',
+                'introformat',
+                'widget_id',
+                'created_at',
+                'name',
+                'start_time',
+                'timemodified',
+                'strict_event',
+                'lock_state',
+                'not_scheduled_event',
+                'duration',
+                'timezone',
+                'password',
+            ]
+        );
 
         // If we had more elements, we would build the tree here.
         // Define data sources.
-        $livewebinar->set_source_table('livewebinar', array('id' => backup::VAR_ACTIVITYID));
+        $livewebinar->set_source_table('livewebinar', ['id' => backup::VAR_ACTIVITYID]);
 
         // If we were referring to other tables, we would annotate the relation
         // with the element's annotate_ids() method.
@@ -61,5 +75,4 @@ class backup_livewebinar_activity_structure_step extends backup_activity_structu
         // Return the root element (livewebinar), wrapped into standard activity structure.
         return $this->prepare_activity_structure($livewebinar);
     }
-
 }
