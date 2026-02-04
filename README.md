@@ -19,6 +19,7 @@ Provide:
 - **Identifier**: `livewebinar`
 - **API credentials** (Client ID and Client Secret) from  
   https://app.livewebinar.com/api-apps
+- **App domain** (optional): defaults to https://app.livewebinar.com (change if your panel uses a different domain)
 
 Save the settings to activate the integration.
 
