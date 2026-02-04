@@ -135,6 +135,12 @@ class mod_livewebinar_client {
     }
 
     /**
+     * Get an access token for API calls.
+     *
+     * @param stdClass|array $config
+     * @param bool $fromCache
+     * @param bool $silent
+     * @return string
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function access_token($config, $fromCache = true, $silent = false) {
@@ -478,6 +484,12 @@ class mod_livewebinar_client {
     }
 
     /**
+     * Get widget details from API.
+     *
+     * @param stdClass|array $config
+     * @param int|string $widget_id
+     * @param bool $fromCache
+     * @return mixed
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function widget_get($config, $widget_id, $fromCache = true) {
@@ -591,6 +603,12 @@ class mod_livewebinar_client {
     }
 
     /**
+     * Fetch report data for a widget.
+     *
+     * @param stdClass|array $config
+     * @param int|string $widget_id
+     * @param bool $del
+     * @return mixed
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function get_report($config, $widget_id, $del=false) {
