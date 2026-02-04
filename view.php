@@ -80,17 +80,13 @@ $strjoin = get_string('join_meeting', 'mod_livewebinar');
 $strdescr = get_string('description', 'mod_livewebinar');
 $strminutestojoin = get_string('minutes_to_join', 'mod_livewebinar');
 $open = get_string('open', 'mod_livewebinar');
-$recordings = get_string('recordings', 'mod_livewebinar');
+$recordingslabel = get_string('recordings', 'mod_livewebinar');
 $genreportstr = get_string('gen_report', 'mod_livewebinar');
 $reportqueuedstr = get_string('report_will_be_emailed', 'mod_livewebinar');
 $strroomid = get_string('roomid', 'mod_livewebinar');
 $strapppanel = get_string('app_panel', 'mod_livewebinar');
 
 $starttime = userdate($livewebinar->start_time, '%Y-%m-%d %H:%M:%S');
-
-// Output starts here.
-echo $OUTPUT->header();
-echo $OUTPUT->heading(format_string($livewebinar->name), 2);
 
 if ($widget->start_date) {
     $strtimevalue = $starttime;
@@ -107,7 +103,6 @@ $table->data[] = [$strdescr . ':', $livewebinar->intro];
 $table->data[] = [$strroomid . ':', $widget->token];
 $table->data[] = [$strtime . ':', $strtimevalue];
 $table->data[] = [$strpassword . ':', $widget->password];
-echo html_writer::table($table);
 
 $admins = get_admins();
 $isadmin = false;
@@ -135,41 +130,55 @@ if ($isadmin) {
         '&_nickname=' . urlencode($nickname);
 }
 
+$joinurl = null;
+$joininfo = null;
 if ($isadmin || $ismanager || !$widget->start_date) {
-    echo '<a href="' . $url . '" target="_blank">' . $strjoin . '</a><br/>';
+    $joinurl = $url;
 } else {
     $minutesuntil = ($widget->start_date - time()) / 60;
     if ($minutesuntil < 90) {
-        echo '<a href="' . $url . '" target="_blank">' . $strjoin . '</a><br/>';
+        $joinurl = $url;
     } else {
-        echo $strminutestojoin . ': ' . floor($minutesuntil);
+        $joininfo = $strminutestojoin . ': ' . floor($minutesuntil);
     }
 }
 
-// Report and app panel.
+$reporturl = null;
+$applink = null;
 if ($isadmin || $ismanager) {
-    // Report.
-    if ($reportrequested) {
-        echo '<hr>' . $reportqueuedstr . '<br/>';
-    } else {
-        echo '<hr><a href="' . $PAGE->url . '&genreport=1">' . $genreportstr . '</a><br/>';
-    }
-
-    // App panel.
-    $applink = $PAGE->url . '&appautologin=1';
-    echo '<hr><a href="' . $applink . '" target="_blank">' . $strapppanel . '</a><br/>';
+    $reporturl = new moodle_url($PAGE->url, ['genreport' => 1]);
+    $applink = new moodle_url($PAGE->url, ['appautologin' => 1]);
 }
 
-// Recording list.
-if ($recordinglist) {
-    echo '<hr><h4>' . $recordings . '</h4>';
+$recordingitems = [];
+if (!empty($recordinglist)) {
     foreach ($recordinglist as $recording) {
-        echo '<br/><a href="' . $recording->url . '" target="_blank">' .
-            $recording->name . '</a><br/>';
+        $recordingitems[] = [
+            'url' => $recording->url,
+            'name' => $recording->name,
+        ];
     }
 }
 
-echo '<br/>';
+$templatedata = [
+    'name' => format_string($livewebinar->name),
+    'table_html' => html_writer::table($table),
+    'join_url' => $joinurl,
+    'join_label' => $strjoin,
+    'join_info' => $joininfo,
+    'show_report_section' => ($isadmin || $ismanager),
+    'report_requested' => $reportrequested,
+    'report_text' => $reportqueuedstr,
+    'report_url' => $reporturl ? $reporturl->out(false) : '',
+    'report_label' => $genreportstr,
+    'app_panel_url' => $applink ? $applink->out(false) : '',
+    'app_panel_label' => $strapppanel,
+    'recordings_label' => $recordingslabel,
+    'recordings' => !empty($recordingitems),
+    'recording_items' => $recordingitems,
+];
 
-// Finish the page.
+// Output starts here.
+echo $OUTPUT->header();
+echo $OUTPUT->render_from_template('mod_livewebinar/view', $templatedata);
 echo $OUTPUT->footer();

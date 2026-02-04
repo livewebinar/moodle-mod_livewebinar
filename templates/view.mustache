@@ -1,0 +1,33 @@
+{{! Template for mod_livewebinar view page }}
+<h2>{{name}}</h2>
+
+{{{table_html}}}
+
+{{#join_url}}
+<a href="{{join_url}}" target="_blank" rel="noopener noreferrer">{{join_label}}</a><br/>
+{{/join_url}}
+{{^join_url}}
+<span>{{join_info}}</span>
+{{/join_url}}
+
+{{#show_report_section}}
+<hr>
+{{#report_requested}}
+{{report_text}}
+{{/report_requested}}
+{{^report_requested}}
+<a href="{{report_url}}">{{report_label}}</a>
+{{/report_requested}}
+<br/>
+<hr>
+<a href="{{app_panel_url}}" target="_blank" rel="noopener noreferrer">{{app_panel_label}}</a><br/>
+{{/show_report_section}}
+
+{{#recordings}}
+<hr><h4>{{recordings_label}}</h4>
+{{#recording_items}}
+<br/><a href="{{url}}" target="_blank" rel="noopener noreferrer">{{name}}</a><br/>
+{{/recording_items}}
+{{/recordings}}
+
+<br/>
