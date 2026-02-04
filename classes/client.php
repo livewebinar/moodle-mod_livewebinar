@@ -201,12 +201,12 @@ class mod_livewebinar_client {
      * Get an access token for API calls.
      *
      * @param stdClass|array $config
-     * @param bool $fromCache
+     * @param bool $fromcache
      * @param bool $silent
      * @return string
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function access_token($config, $fromCache = true, $silent = false) {
+    public function access_token($config, $fromcache = true, $silent = false) {
 
         $clientid = $this->get_config_value($config, 'client_id');
         $clientsecret = $this->get_config_value($config, 'client_secret');
@@ -214,7 +214,7 @@ class mod_livewebinar_client {
 
         $cache = cache::make('mod_livewebinar', 'access_token');
         $cachekey = $this->get_access_token_cache_key($config);
-        if ($fromCache && ($access_token = $cache->get($cachekey))) {
+        if ($fromcache && ($access_token = $cache->get($cachekey))) {
             return $access_token;
         }
 
@@ -420,10 +420,10 @@ class mod_livewebinar_client {
         }
     }
 
-    public function generate_user_widget_token($config, $widgetToken, $widget_id, $user_id) {
+    public function generate_user_widget_token($config, $widgettoken, $widget_id, $user_id) {
         $token = $this->access_token($config);
         $csett = array(
-            CURLOPT_URL => $this->api_url."/account/widget_tokens/items/generate/".$widgetToken->id,
+            CURLOPT_URL => $this->api_url."/account/widget_tokens/items/generate/".$widgettoken->id,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -457,17 +457,17 @@ class mod_livewebinar_client {
 
     public function get_user_widget_token($config, $widget, $widget_id, $user_id) {
 
-        $widgetTokenCache = cache::make('mod_livewebinar', 'widget_token');
-        $userTokenCache = cache::make('mod_livewebinar', 'user_widget_token');
+        $widgettokencache = cache::make('mod_livewebinar', 'widget_token');
+        $usertokencache = cache::make('mod_livewebinar', 'user_widget_token');
         
-        if (!$userWidgetToken = $userTokenCache->get($user_id."_".$widget_id)) {
-            if ((!$widgetToken = $widgetTokenCache->get($widget_id))) {
-                $widgetToken = $this->generate_widget_token($config, $widget, $widget_id, $user_id);
+        if (!$userwidgettoken = $usertokencache->get($user_id . "_" . $widget_id)) {
+            if ((!$widgettoken = $widgettokencache->get($widget_id))) {
+                $widgettoken = $this->generate_widget_token($config, $widget, $widget_id, $user_id);
             }
-            $userWidgetToken = $this->generate_user_widget_token($config, $widgetToken, $widget_id, $user_id);
+            $userwidgettoken = $this->generate_user_widget_token($config, $widgettoken, $widget_id, $user_id);
         }
 
-        return $userWidgetToken;
+        return $userwidgettoken;
     }
 
     public function widget_delete($config, $widget_id) {
@@ -517,15 +517,15 @@ class mod_livewebinar_client {
      *
      * @param stdClass|array $config
      * @param int|string $widget_id
-     * @param bool $fromCache
+     * @param bool $fromcache
      * @return mixed
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function widget_get($config, $widget_id, $fromCache = true) {
+    public function widget_get($config, $widget_id, $fromcache = true) {
 
 
         $cache = cache::make('mod_livewebinar', 'widget');
-        if ($fromCache && ($widget = $cache->get($widget_id))) {
+        if ($fromcache && ($widget = $cache->get($widget_id))) {
             return $widget;
         }
 
@@ -627,15 +627,15 @@ class mod_livewebinar_client {
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function get_report($config, $widget_id, $del=false) {
-        $delTxt = '';
-        if($del) {
-            $delTxt = '/true';
+        $deltxt = '';
+        if ($del) {
+            $deltxt = '/true';
         }
 
         $token = $this->access_token($config);
 
         $csett = array(
-                CURLOPT_URL => $this->api_url."/reports/widget/{$widget_id}/event/xls{$delTxt}",
+                CURLOPT_URL => $this->api_url."/reports/widget/{$widget_id}/event/xls{$deltxt}",
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_MAXREDIRS => 10,
