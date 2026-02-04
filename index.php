@@ -22,20 +22,66 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require(__DIR__ . '/../../config.php');
-require_login();
+require_once(__DIR__ . '/../../config.php');
+require_once(__DIR__ . '/lib.php');
+require_once($CFG->dirroot . '/course/lib.php');
 
-$id = optional_param('id', 0, PARAM_INT);
+$id = required_param('id', PARAM_INT);
 
-if ($id) {
-    redirect(new moodle_url('/mod/livewebinar/view.php', ['id' => $id]));
+$course = $DB->get_record('course', ['id' => $id], '*', MUST_EXIST);
+require_course_login($course);
+
+$context = context_course::instance($course->id);
+$event = \mod_livewebinar\event\course_module_instance_list_viewed::create([
+    'context' => $context,
+]);
+$event->add_record_snapshot('course', $course);
+$event->trigger();
+
+$PAGE->set_url('/mod/livewebinar/index.php', ['id' => $course->id]);
+$PAGE->set_title($course->shortname . ': ' . get_string('modulenameplural', 'mod_livewebinar'));
+$PAGE->set_heading($course->fullname);
+
+$instances = get_all_instances_in_course('livewebinar', $course);
+if (!$instances) {
+    notice(
+        get_string('thereareno', 'moodle', get_string('modulenameplural', 'mod_livewebinar')),
+        new moodle_url('/course/view.php', ['id' => $course->id])
+    );
 }
 
-$PAGE->set_url('/mod/livewebinar/index.php');
-$PAGE->set_context(context_system::instance());
-$PAGE->set_title(get_string('pluginname', 'mod_livewebinar'));
-$PAGE->set_heading(get_string('pluginname', 'mod_livewebinar'));
+$usesections = course_format_uses_sections($course->format);
+$table = new html_table();
+$table->attributes['class'] = 'generaltable mod_index';
+if ($usesections) {
+    $table->head = [
+        get_string('sectionname', 'format_' . $course->format),
+        get_string('name'),
+    ];
+    $table->align = ['center', 'left'];
+} else {
+    $table->head = [get_string('name')];
+    $table->align = ['left'];
+}
+
+foreach ($instances as $instance) {
+    $link = html_writer::link(
+        new moodle_url('/mod/livewebinar/view.php', ['id' => $instance->coursemodule]),
+        format_string($instance->name, true)
+    );
+    if (!$instance->visible) {
+        $link = html_writer::tag('span', $link, ['class' => 'dimmed']);
+    }
+
+    if ($usesections) {
+        $sectionname = get_section_name($course, $instance->section);
+        $table->data[] = [$sectionname, $link];
+    } else {
+        $table->data[] = [$link];
+    }
+}
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('pluginname', 'mod_livewebinar'));
+echo $OUTPUT->heading(get_string('modulenameplural', 'mod_livewebinar'), 2);
+echo html_writer::table($table);
 echo $OUTPUT->footer();

@@ -59,6 +59,31 @@ function livewebinar_supports($feature) {
 }
 
 /**
+ * Trigger module viewed event and update completion state.
+ *
+ * @param stdClass $livewebinar Livewebinar record
+ * @param stdClass $course Course record
+ * @param cm_info $cm Course module
+ * @param context_module $context Module context
+ * @return void
+ */
+function livewebinar_view($livewebinar, $course, $cm, $context) {
+    global $CFG;
+    require_once($CFG->libdir . '/completionlib.php');
+
+    $event = \mod_livewebinar\event\course_module_viewed::create([
+        'objectid' => $livewebinar->id,
+        'context' => $context,
+    ]);
+    $event->add_record_snapshot('course', $course);
+    $event->add_record_snapshot('livewebinar', $livewebinar);
+    $event->trigger();
+
+    $completion = new completion_info($course);
+    $completion->set_module_viewed($cm);
+}
+
+/**
  * Saves a new instance of the livewebinar into the database
  *
  * Given an object containing all the necessary data,
