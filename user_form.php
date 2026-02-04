@@ -64,6 +64,7 @@ class mod_livewebinar_user_form extends moodleform {
      */
     public function validation($data, $files) {
         $errors = [];
+        unset($data, $files);
 
         $service = new mod_livewebinar_client();
         $config = get_config('mod_livewebinar');

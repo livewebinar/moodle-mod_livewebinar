@@ -36,7 +36,7 @@ if ($ADMIN->fulltree) {
         $service = new mod_livewebinar_client();
         try {
             $config = get_config('mod_livewebinar');
-            $token = $service->access_token($config, false, true);
+            $service->access_token($config, false, true);
         } catch (moodle_exception $e) {
             $status = $service->lasterror;
             $notifyclass = 'notifyproblem';
