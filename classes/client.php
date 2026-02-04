@@ -90,6 +90,7 @@ class mod_livewebinar_client {
      * Ensure identifier is present and return it.
      *
      * @param stdClass|array $config
+     * @param bool $silent Throw exception instead of showing error if true
      * @return string
      */
     private function require_identifier($config, bool $silent = false): string {
@@ -109,6 +110,7 @@ class mod_livewebinar_client {
      *
      * @param array $headers
      * @param stdClass|array $config
+     * @param bool $silent Throw exception instead of showing error if true
      * @return array
      */
     private function add_identifier_header(array $headers, $config, bool $silent = false): array {

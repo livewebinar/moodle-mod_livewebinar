@@ -37,7 +37,8 @@ class createwidget_test extends advanced_testcase {
     /**
      * Setup webservice mocking.
      */
-    public function setUp() {
+    protected function setUp(): void {
+        parent::setUp();
         $this->resetAfterTest(true);
     }
 

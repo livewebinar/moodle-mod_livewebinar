@@ -69,7 +69,7 @@ $getreport = get_string('get_report', 'mod_livewebinar');
 
 $start_time = userdate($livewebinar->start_time, '%Y-%m-%d %H:%M:%S');
 //
-//// Output starts here.
+// Output starts here.
 echo $OUTPUT->header();
 echo $OUTPUT->heading(format_string($livewebinar->name), 2);
 

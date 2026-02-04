@@ -36,7 +36,7 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Returns the information on whether the module supports a feature
  *
- * See {@link plugin_supports()} for more info.
+ * See {@see plugin_supports()} for more info.
  *
  * @param string $feature FEATURE_xx constant for requested feature
  * @return mixed true if the feature is supported, null if unknown
@@ -232,6 +232,9 @@ function livewebinar_update_auth_item(stdClass $auth) {
  * Print a user-friendly error message when a livewebinar API call errors, or fall back to a generic error message.
  *
  * @param string $error Error message (most likely from mod_livewebinar_webservice->lasterror)
+ * @param int $fromApiRTC Whether the error originated from RTC API calls
+ * @param array $csett Optional cURL settings for debugging
+ * @return void
  */
 function livewebinar_print_error($error, $fromApiRTC=0, $csett=array()) {
     global $CFG, $COURSE, $OUTPUT, $PAGE;

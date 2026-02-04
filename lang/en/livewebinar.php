@@ -28,6 +28,7 @@ $string['pluginname'] = 'LiveWebinar Meeting';
 $string['modulename'] = 'LiveWebinar Meeting';
 $string['modulenameplural'] = 'LiveWebinar Meeting';
 $string['pluginadministration'] = 'Manage LiveWebinar Meeting';
+$string['livewebinar:addinstance'] = 'Add a LiveWebinar Meeting instance';
 //
 $string['register_txt'] = '';
 $string['authorization'] = 'Authorization';
