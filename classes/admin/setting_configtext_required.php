@@ -95,6 +95,10 @@ class setting_configtext_required extends \admin_setting_configtext {
             $service->access_token($config, false, true);
         } catch (\moodle_exception $e) {
             $message = $service->lasterror ?: $e->getMessage();
+            $trimmed = trim((string)$message);
+            if ($trimmed === '' || preg_match('/^error\\/?$/i', $trimmed)) {
+                $message = get_string('credentials_invalid_generic', 'mod_livewebinar');
+            }
             return get_string('credentials_invalid', 'mod_livewebinar', $message);
         }
 
