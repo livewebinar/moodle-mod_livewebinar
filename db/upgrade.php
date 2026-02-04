@@ -33,7 +33,6 @@
  *
  * @param int $oldversion
  * @return bool
- * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 function xmldb_livewebinar_upgrade($oldversion) {
     return true;

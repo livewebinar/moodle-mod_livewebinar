@@ -28,8 +28,7 @@
  * @copyright  LiveWebinar by RTCLAB Sp. z o.o.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-// phpcs:disable moodle.PHPUnit.TestCaseNames.MissingNS
-class createwidget_test extends \advanced_testcase {
+class createwidget_test extends \advanced_testcase { // phpcs:ignore moodle.PHPUnit.TestCaseNames.MissingNS
     /**
      * Setup webservice mocking.
      */
@@ -45,4 +44,3 @@ class createwidget_test extends \advanced_testcase {
         $this->assertTrue(true);
     }
 }
-// phpcs:enable moodle.PHPUnit.TestCaseNames.MissingNS

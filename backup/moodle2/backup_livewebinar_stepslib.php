@@ -28,7 +28,6 @@
  * @category  backup
  * @copyright LiveWebinar by RTCLAB Sp. z o.o.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @SuppressWarnings(PHPMD.ExcessiveClassName)
  */
 class backup_livewebinar_activity_structure_step extends backup_activity_structure_step {
     /**

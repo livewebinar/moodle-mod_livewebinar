@@ -112,10 +112,10 @@ class mod_livewebinar_mod_form extends moodleform_mod {
         $mform->setType('user_id', PARAM_INT);
         $mform->addElement('header', 'authorization', get_string('authorization', 'mod_livewebinar'));
         $mform->addElement(
-        'static',
-        'livewebinarcredentialsinfo',
-        '',
-        get_string('credentials_managed_globally', 'mod_livewebinar')
+            'static',
+            'livewebinarcredentialsinfo',
+            '',
+            get_string('credentials_managed_globally', 'mod_livewebinar')
         );
         $this->add_action_buttons();
     }
@@ -127,7 +127,6 @@ class mod_livewebinar_mod_form extends moodleform_mod {
      * @param array $data
      * @param array $files
      * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function validation($data, $files) {
         $errors = [];

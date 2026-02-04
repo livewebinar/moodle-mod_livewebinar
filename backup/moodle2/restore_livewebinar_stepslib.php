@@ -33,7 +33,6 @@ require_once($CFG->dirroot . '/mod/livewebinar/locallib.php');
  * @category  backup
  * @copyright  LiveWebinar by RTCLAB Sp. z o.o.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @SuppressWarnings(PHPMD.ExcessiveClassName)
  */
 class restore_livewebinar_activity_structure_step extends restore_activity_structure_step {
     /**
