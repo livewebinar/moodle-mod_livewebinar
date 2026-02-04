@@ -1,10 +1,32 @@
-{{! Template for mod_livewebinar view page }}
-<h2>{{name}}</h2>
+{{!
+    @template mod_livewebinar/view
+    Example context (json):
+    {
+        "name": "Weekly webinar",
+        "table_html": "<table><tr><td>Description:</td><td>Example</td></tr></table>",
+        "join_url": "https://example.com/join",
+        "join_label": "Join Meeting",
+        "join_info": "You can join in minutes: 30",
+        "show_report_section": true,
+        "report_requested": false,
+        "report_text": "Report will be emailed to you when it is ready.",
+        "report_url": "https://example.com/report",
+        "report_label": "Generate report",
+        "app_panel_url": "https://example.com/panel",
+        "app_panel_label": "App Panel",
+        "recordings_label": "Recordings",
+        "recordings": true,
+        "recording_items": [
+            { "url": "https://example.com/rec1", "name": "Recording 1" }
+        ]
+    }
+}}
+{{#name}}<h2>{{name}}</h2>{{/name}}
 
 {{{table_html}}}
 
 {{#join_url}}
-<a href="{{join_url}}" target="_blank" rel="noopener noreferrer">{{join_label}}</a><br/>
+<a href="{{join_url}}" target="_blank" rel="noopener noreferrer">{{join_label}}</a><br>
 {{/join_url}}
 {{^join_url}}
 <span>{{join_info}}</span>
@@ -18,16 +40,16 @@
 {{^report_requested}}
 <a href="{{report_url}}">{{report_label}}</a>
 {{/report_requested}}
-<br/>
+<br>
 <hr>
-<a href="{{app_panel_url}}" target="_blank" rel="noopener noreferrer">{{app_panel_label}}</a><br/>
+<a href="{{app_panel_url}}" target="_blank" rel="noopener noreferrer">{{app_panel_label}}</a><br>
 {{/show_report_section}}
 
 {{#recordings}}
 <hr><h4>{{recordings_label}}</h4>
 {{#recording_items}}
-<br/><a href="{{url}}" target="_blank" rel="noopener noreferrer">{{name}}</a><br/>
+<br><a href="{{url}}" target="_blank" rel="noopener noreferrer">{{name}}</a><br>
 {{/recording_items}}
 {{/recordings}}
 
-<br/>
+<br>
