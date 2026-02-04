@@ -25,6 +25,7 @@ defined('MOODLE_INTERNAL') || die();
 
 if ($ADMIN->fulltree) {
     require_once($CFG->dirroot . '/mod/livewebinar/classes/client.php');
+    require_once($CFG->dirroot . '/mod/livewebinar/classes/admin/setting_confighttps_domain.php');
 
     $settings = new admin_settingpage('modsettinglivewebinar', get_string('pluginname', 'mod_livewebinar'));
 
@@ -55,10 +56,19 @@ if ($ADMIN->fulltree) {
         'mod_livewebinar/identifier',
         get_string('identifier', 'mod_livewebinar'),
         get_string('identifier_desc', 'mod_livewebinar'),
-        '',
+        'livewebinar',
         PARAM_ALPHANUMEXT
     );
     $settings->add($identifier);
+
+    $appdomain = new \mod_livewebinar\admin\setting_confighttps_domain(
+        'mod_livewebinar/appdomain',
+        get_string('appdomain', 'mod_livewebinar'),
+        get_string('appdomain_desc', 'mod_livewebinar'),
+        'https://app.livewebinar.com',
+        PARAM_URL
+    );
+    $settings->add($appdomain);
 
     $clientid = new \mod_livewebinar\admin\setting_configtext_required(
         'mod_livewebinar/client_id',

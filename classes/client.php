@@ -705,6 +705,146 @@ class mod_livewebinar_client {
         }
     }
 
+    /**
+     * Request autologin token for App Panel.
+     *
+     * @param stdClass|array $config
+     * @param string $appdomain
+     * @return string
+     */
+    public function get_autologin_token($config, string $appdomain): string {
+        global $CFG;
+
+        $token = $this->access_token($config);
+        $apiurl = rtrim($this->api_url, '/') . '/users/autologinToken';
+
+        $curl = curl_init();
+        $csett = array(
+            CURLOPT_URL => $apiurl,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 0,
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => $this->add_identifier_header(array(
+                "Authorization: Bearer {$token}",
+                "Accept: application/vnd.archiebot.v1+json"
+            ), $config),
+        );
+        curl_setopt_array($curl, $csett);
+
+        $rawresponse = curl_exec($curl);
+        $err = curl_error($curl);
+        $httpcode = (int)curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $contenttype = (string)curl_getinfo($curl, CURLINFO_CONTENT_TYPE);
+        $redirecturl = (string)curl_getinfo($curl, CURLINFO_REDIRECT_URL);
+        $headersize = (int)curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+        curl_close($curl);
+
+        if ($err) {
+            $this->lasterror = $err;
+            livewebinar_print_error($err);
+        }
+
+        $header = '';
+        $body = $rawresponse;
+        if ($headersize > 0) {
+            $header = substr((string)$rawresponse, 0, $headersize);
+            $body = substr((string)$rawresponse, $headersize);
+        }
+
+        if ($httpcode >= 300 && $httpcode < 400) {
+            $location = '';
+            if (preg_match('/^Location:\\s*(.+)$/mi', (string)$header, $matches)) {
+                $location = trim($matches[1]);
+            }
+            if ($location !== '') {
+                $parsed = parse_url($location);
+                if (empty($parsed['scheme'])) {
+                    $base = parse_url($apiurl);
+                    $prefix = $base['scheme'] . '://' . $base['host'];
+                    $location = $prefix . '/' . ltrim($location, '/');
+                }
+                $curl = curl_init();
+                $csett[CURLOPT_URL] = $location;
+                $csett[CURLOPT_HEADER] = false;
+                curl_setopt_array($curl, $csett);
+                $rawresponse = curl_exec($curl);
+                $err = curl_error($curl);
+                $httpcode = (int)curl_getinfo($curl, CURLINFO_HTTP_CODE);
+                $contenttype = (string)curl_getinfo($curl, CURLINFO_CONTENT_TYPE);
+                curl_close($curl);
+                if ($err) {
+                    $this->lasterror = $err;
+                    livewebinar_print_error($err);
+                }
+                $header = '';
+                $body = $rawresponse;
+            }
+        }
+
+        $response = json_decode((string)$body);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $this->lasterror = 'Autologin endpoint returned non-JSON response (HTTP ' . $httpcode . ').';
+            if ($redirecturl !== '') {
+                $this->lasterror .= ' Redirected to: ' . $redirecturl . '.';
+            }
+            if (!empty($CFG->debugdeveloper)) {
+                $snippet = trim(preg_replace('/\\s+/', ' ', (string)$body));
+                $snippet = substr($snippet, 0, 200);
+                $this->lasterror .= ' Content-Type: ' . $contenttype . '. Response: ' . $snippet;
+            }
+            livewebinar_print_error($this->lasterror);
+        }
+        if (isset($response->error)) {
+            $this->lasterror = $response->error->message;
+            livewebinar_print_error($response->error->message, 1, $csett);
+        }
+
+        $token = null;
+        if (isset($response->data)) {
+            if (is_array($response->data)) {
+                if (isset($response->data[0]->autologin_token)) {
+                    $token = $response->data[0]->autologin_token;
+                } else if (isset($response->data[0]->autologinToken)) {
+                    $token = $response->data[0]->autologinToken;
+                } else if (isset($response->data[0]['autologin_token'])) {
+                    $token = $response->data[0]['autologin_token'];
+                } else if (isset($response->data[0]['autologinToken'])) {
+                    $token = $response->data[0]['autologinToken'];
+                } else if (isset($response->data['autologin_token'])) {
+                    $token = $response->data['autologin_token'];
+                } else if (isset($response->data['autologinToken'])) {
+                    $token = $response->data['autologinToken'];
+                }
+            } else if (is_object($response->data)) {
+                if (isset($response->data->autologin_token)) {
+                    $token = $response->data->autologin_token;
+                } else if (isset($response->data->autologinToken)) {
+                    $token = $response->data->autologinToken;
+                }
+            }
+        } else if (isset($response->autologin_token)) {
+            $token = $response->autologin_token;
+        } else if (isset($response->autologinToken)) {
+            $token = $response->autologinToken;
+        }
+
+        if (!empty($token)) {
+            return $token;
+        }
+
+        if (isset($response->message)) {
+            $this->lasterror = (string)$response->message;
+        } else {
+            $this->lasterror = 'Autologin token missing.';
+        }
+        livewebinar_print_error($this->lasterror);
+    }
+
     public function prepare_agenda($agenda) {
         $agenda = str_replace('<br>',"\n",$agenda);
         $agenda = str_replace('<br/>',"\n",$agenda);

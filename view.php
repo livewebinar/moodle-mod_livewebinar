@@ -44,9 +44,32 @@ $recordinglist = $service->widget_get_recordings($auth, $livewebinar->widget_id)
 $userwidgettoken = $service->get_user_widget_token($auth, $widget, $livewebinar->widget_id, $USER->id);
 
 $genreport = optional_param('genreport', 0, PARAM_INT);
-$genreporturl = '';
+$appautologin = optional_param('appautologin', 0, PARAM_INT);
+$reportrequested = false;
 if ($genreport) {
-    $genreporturl = $service->get_report_url($auth, $livewebinar->widget_id);
+    $reportrequested = true;
+    if (!isset($SESSION->mod_livewebinar_report_requested)) {
+        $SESSION->mod_livewebinar_report_requested = [];
+    }
+    if (empty($SESSION->mod_livewebinar_report_requested[$livewebinar->id])) {
+        $service->create_report($auth, $livewebinar->widget_id);
+        $SESSION->mod_livewebinar_report_requested[$livewebinar->id] = time();
+    }
+}
+
+$config = get_config('mod_livewebinar');
+$appdomain = 'https://app.livewebinar.com';
+if (!empty($config->appdomain)) {
+    $appdomain = $config->appdomain;
+}
+$appdomain = rtrim($appdomain, '/');
+
+if ($appautologin) {
+    $autologintoken = $service->get_autologin_token($auth, $appdomain);
+    $redirectto = '/widgets/details/' . $livewebinar->widget_id;
+    $autologinurl = $appdomain . '/account_auto_login/' . urlencode($autologintoken) .
+        '?redirect_to=' . urlencode($redirectto);
+    redirect($autologinurl);
 }
 
 $strtime = get_string('start_time', 'mod_livewebinar');
@@ -57,7 +80,7 @@ $strminutestojoin = get_string('minutes_to_join', 'mod_livewebinar');
 $open = get_string('open', 'mod_livewebinar');
 $recordings = get_string('recordings', 'mod_livewebinar');
 $genreportstr = get_string('gen_report', 'mod_livewebinar');
-$getreportstr = get_string('get_report', 'mod_livewebinar');
+$reportqueuedstr = get_string('report_will_be_emailed', 'mod_livewebinar');
 
 $starttime = userdate($livewebinar->start_time, '%Y-%m-%d %H:%M:%S');
 
@@ -122,16 +145,15 @@ if ($isadmin || $ismanager || !$widget->start_date) {
 // Report and app panel.
 if ($isadmin || $ismanager) {
     // Report.
-    if ($genreporturl) {
-        echo '<hr><a href="' . $genreporturl . '" target="_blank">' . $getreportstr . '</a><br />';
+    if ($reportrequested) {
+        echo '<hr>' . $reportqueuedstr . '<br/>';
     } else {
         echo '<hr><a href="' . $PAGE->url . '&genreport=1">' . $genreportstr . '</a><br/>';
     }
 
     // App panel.
-    $token = base64_encode($service->access_token($auth));
-    echo '<hr><a href="https://app.html5meeting.com/auth/login/' . $token .
-        '" target="_blank">App Panel</a><br/>';
+    $applink = $PAGE->url . '&appautologin=1';
+    echo '<hr><a href="' . $applink . '" target="_blank">App Panel</a><br/>';
 }
 
 // Recording list.
