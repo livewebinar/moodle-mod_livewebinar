@@ -29,10 +29,7 @@ if ($ADMIN->fulltree) {
     $settings = new admin_settingpage('modsettinglivewebinar', get_string('pluginname', 'mod_livewebinar'));
 
     // Test connection if it is setup and user is on the settings page.
-    if (
-        !CLI_SCRIPT
-        && $PAGE->url == $CFG->wwwroot . '/' . $CFG->admin . '/settings.php?section=modsettinglivewebinar'
-    ) {
+    if (!CLI_SCRIPT && $PAGE->url == $CFG->wwwroot . '/' . $CFG->admin . '/settings.php?section=modsettinglivewebinar') {
         $status = get_string('connectionok', 'mod_livewebinar');
         $notifyclass = 'notifysuccess';
         $service = new mod_livewebinar_client();
@@ -44,8 +41,8 @@ if ($ADMIN->fulltree) {
             $notifyclass = 'notifyproblem';
         }
         $statusmessage = $OUTPUT->notification(
-            get_string('connectionstatus', 'mod_livewebinar') . ': ' . $status,
-            $notifyclass
+        get_string('connectionstatus', 'mod_livewebinar') . ': ' . $status,
+        $notifyclass
         );
         $connectionstatus = new admin_setting_heading('mod_livewebinar/connectionstatus', $statusmessage, '');
         $settings->add($connectionstatus);
@@ -55,29 +52,29 @@ if ($ADMIN->fulltree) {
     $settings->add($register);
 
     $identifier = new \mod_livewebinar\admin\setting_configtext_required(
-        'mod_livewebinar/identifier',
-        get_string('identifier', 'mod_livewebinar'),
-        get_string('identifier_desc', 'mod_livewebinar'),
-        '',
-        PARAM_ALPHANUMEXT
+    'mod_livewebinar/identifier',
+    get_string('identifier', 'mod_livewebinar'),
+    get_string('identifier_desc', 'mod_livewebinar'),
+    '',
+    PARAM_ALPHANUMEXT
     );
     $settings->add($identifier);
 
     $clientid = new \mod_livewebinar\admin\setting_configtext_required(
-        'mod_livewebinar/client_id',
-        get_string('client_id', 'mod_livewebinar'),
-        get_string('client_id_desc', 'mod_livewebinar'),
-        '',
-        PARAM_ALPHANUMEXT
+    'mod_livewebinar/client_id',
+    get_string('client_id', 'mod_livewebinar'),
+    get_string('client_id_desc', 'mod_livewebinar'),
+    '',
+    PARAM_ALPHANUMEXT
     );
     $settings->add($clientid);
 
     $clientsecret = new \mod_livewebinar\admin\setting_configtext_required(
-        'mod_livewebinar/client_secret',
-        get_string('client_secret', 'mod_livewebinar'),
-        get_string('client_secret_desc', 'mod_livewebinar'),
-        '',
-        PARAM_ALPHANUMEXT
+    'mod_livewebinar/client_secret',
+    get_string('client_secret', 'mod_livewebinar'),
+    get_string('client_secret_desc', 'mod_livewebinar'),
+    '',
+    PARAM_ALPHANUMEXT
     );
     $settings->add($clientsecret);
 

@@ -39,7 +39,6 @@ class update_widgets extends \core\task\scheduled_task {
      * @return boolean
      */
     public function execute() {
-        global $DB;
         return true;
     }
 }

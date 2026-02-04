@@ -28,6 +28,7 @@
  * @category  backup
  * @copyright LiveWebinar by RTCLAB Sp. z o.o.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @SuppressWarnings(PHPMD.ExcessiveClassName)
  */
 class backup_livewebinar_activity_structure_step extends backup_activity_structure_step {
     /**
@@ -36,9 +37,6 @@ class backup_livewebinar_activity_structure_step extends backup_activity_structu
      * @return backup_nested_element
      */
     protected function define_structure() {
-        // Are we including userinfo?
-        $userinfo = $this->get_setting_value('userinfo');
-
         // Define the root element describing the livewebinar instance.
         $livewebinar = new backup_nested_element(
             'livewebinar',

@@ -69,6 +69,7 @@ function livewebinar_supports($feature) {
  * @param stdClass $livewebinar Submitted data from the form in mod_form.php
  * @param mod_livewebinar_mod_form|null $mform The form instance itself (if needed)
  * @return int The id of the newly inserted livewebinar record
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 function livewebinar_add_instance(stdClass $livewebinar, ?mod_livewebinar_mod_form $mform = null) {
     global $CFG, $DB, $USER;
@@ -113,9 +114,10 @@ function livewebinar_add_instance(stdClass $livewebinar, ?mod_livewebinar_mod_fo
  * @param stdClass $livewebinar An object from the form in mod_form.php
  * @param mod_livewebinar_mod_form|null $mform The form instance itself (if needed)
  * @return boolean Success/Fail
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 function livewebinar_update_instance(stdClass $livewebinar, ?mod_livewebinar_mod_form $mform = null) {
-    global $CFG, $DB, $USER;
+    global $CFG, $DB;
     require_once($CFG->dirroot . '/mod/livewebinar/classes/client.php');
     $livewebinar->id = $livewebinar->instance;
 
@@ -228,6 +230,7 @@ function livewebinar_update_auth_item(stdClass $auth) {
  * @param int $fromapirtc Whether the error originated from RTC API calls
  * @param array $csett Optional cURL settings for debugging
  * @return void
+ * @SuppressWarnings(PHPMD.ExitExpression)
  */
 function livewebinar_print_error($error, int $fromapirtc = 0, array $csett = []) {
     global $CFG, $COURSE, $OUTPUT, $PAGE;

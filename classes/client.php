@@ -30,6 +30,7 @@ defined('MOODLE_INTERNAL') || die();
  * @package   mod_livewebinar
  * @copyright LiveWebinar by RTCLAB Sp. z o.o.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class mod_livewebinar_client {
 
@@ -92,6 +93,7 @@ class mod_livewebinar_client {
      * @param stdClass|array $config
      * @param bool $silent Throw exception instead of showing error if true
      * @return string
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     private function require_identifier($config, bool $silent = false): string {
         $identifier = $this->resolve_identifier($config);
@@ -112,6 +114,7 @@ class mod_livewebinar_client {
      * @param stdClass|array $config
      * @param bool $silent Throw exception instead of showing error if true
      * @return array
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     private function add_identifier_header(array $headers, $config, bool $silent = false): array {
         $identifier = $this->require_identifier($config, $silent);
@@ -131,6 +134,9 @@ class mod_livewebinar_client {
         return sha1($clientid . ':' . $identifier);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+     */
     public function access_token($config, $fromCache = true, $silent = false) {
 
         $clientid = $this->get_config_value($config, 'client_id');
@@ -471,6 +477,9 @@ class mod_livewebinar_client {
         }
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+     */
     public function widget_get($config, $widget_id, $fromCache = true) {
 
 
@@ -581,6 +590,9 @@ class mod_livewebinar_client {
         }
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
+     */
     public function get_report($config, $widget_id, $del=false) {
         $delTxt = '';
         if($del) {

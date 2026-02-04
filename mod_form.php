@@ -48,15 +48,6 @@ class mod_livewebinar_mod_form extends moodleform_mod {
 
         $userid = (isset($this->current) && isset($this->current->user_id) && $this->current->user_id) ?
             $this->current->user_id : $USER->id;
-        $admins = get_admins();
-        $isadmin = false;
-        foreach ($admins as $admin) {
-            if ($USER->id == $admin->id) {
-                $isadmin = true;
-                break;
-            }
-        }
-
         // Adding the "general" fieldset, where all the common settings are shown.
         $mform->addElement('header', 'general', get_string('general', 'form'));
 
@@ -66,7 +57,7 @@ class mod_livewebinar_mod_form extends moodleform_mod {
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 300), 'maxlength', 300, 'client');
 
-        // Add description (intro and introformat).
+        // Add description fields.
         $this->standard_intro_elements();
 
         // Add open event.
@@ -121,10 +112,10 @@ class mod_livewebinar_mod_form extends moodleform_mod {
         $mform->setType('user_id', PARAM_INT);
         $mform->addElement('header', 'authorization', get_string('authorization', 'mod_livewebinar'));
         $mform->addElement(
-            'static',
-            'livewebinarcredentialsinfo',
-            '',
-            get_string('credentials_managed_globally', 'mod_livewebinar')
+        'static',
+        'livewebinarcredentialsinfo',
+        '',
+        get_string('credentials_managed_globally', 'mod_livewebinar')
         );
         $this->add_action_buttons();
     }
@@ -136,6 +127,7 @@ class mod_livewebinar_mod_form extends moodleform_mod {
      * @param array $data
      * @param array $files
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function validation($data, $files) {
         $errors = [];
