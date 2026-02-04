@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of the LiveWebinar plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -36,15 +35,13 @@ require_once($CFG->dirroot . '/mod/livewebinar/locallib.php');
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_livewebinar_activity_structure_step extends restore_activity_structure_step {
-
     /**
      * Defines structure of path elements to be processed during the restore
      *
      * @return restore_path_element[] List of restore path elements
      */
     protected function define_structure() {
-
-        $paths = array();
+        $paths = [];
         $paths[] = new restore_path_element('livewebinar', '/activity/livewebinar');
 
         // Return the paths wrapped into standard activity structure.

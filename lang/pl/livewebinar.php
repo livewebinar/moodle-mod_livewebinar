@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of the livewebinar plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
 /**
  * Polish strings for livewebinar.
  *
@@ -29,7 +27,6 @@ $string['pluginname'] = 'LiveWebinar Meeting';
 $string['modulename'] = 'LiveWebinar Meeting';
 $string['modulenameplural'] = 'LiveWebinar Meeting';
 $string['pluginadministration'] = 'Zarządzaj LiveWebinar Meeting';
-//
 $string['register_txt'] = '';
 $string['authorization'] = 'Autoryzacja';
 $string['client_id'] = 'ID klienta API LiveWebinar';
@@ -41,7 +38,6 @@ $string['username_desc'] = 'Dostępne w panelu użytkownika LiveWebinar';
 $string['password'] = 'Hasło';
 $string['password_desc'] = 'Dostępne w panelu użytkownika LiveWebinar';
 $string['errorapinotconfigured'] = 'Dane dostępowe API LiveWebinar nie zostały skonfigurowane.';
-//
 $string['connectionok'] = 'Jesteś połączony';
 $string['connectionstatus'] = 'Status połączenia';
 $string['credentials_managed_globally'] = 'Dane dostępowe API LiveWebinar są zarządzane w ustawieniach wtyczki.';
@@ -49,7 +45,6 @@ $string['credentials_missing'] = 'Skonfiguruj w ustawieniach wtyczki identyfikat
 $string['credentials_invalid'] = 'Dane dostępowe LiveWebinar są nieprawidłowe: {$a}';
 $string['identifier_missing'] = 'Identyfikator jest wymagany. Skonfiguruj identyfikator LiveWebinar w ustawieniach wtyczki.';
 $string['setting_required'] = 'To pole jest wymagane.';
-//
 $string['topic'] = 'Temat';
 $string['description'] = 'Opis';
 $string['start_time'] = 'Czas Rozpoczęcia';
@@ -65,14 +60,11 @@ $string['open'] = 'Pokój otwarty cały czas';
 $string['join_meeting'] = 'Dołącz do spotkania';
 $string['minutes_to_join'] = 'Możliwość dołączenia za minut';
 $string['recordings'] = 'Nagrania';
-//
 $string['err_password'] = 'Hasło może zawierać tylko następujące znaki: [a-z A-Z 0-9 @ - _ *]. Maksymalnie 10 znaków.';
 $string['err_start_time_past'] = 'Data rozpoczęcia spotkania nie może być w przeszłości.';
 $string['err_duration_nonpositive'] = 'Ustaw czas trwania';
 $string['err_duration_too_long'] = 'Czas trwania nie może przekroczyć 150 godzin.';
-//
 $string['updatewidgets'] = 'Zaktualizuj spotkania';
-//
 $string['users'] = 'Użytkownicy';
 $string['save'] = 'Zapisz';
 $string['livewebinar:view'] = 'Obejrzyj Nowe lekcje online';

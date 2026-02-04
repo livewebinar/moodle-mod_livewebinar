@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of the livewebinar plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -21,11 +20,9 @@
  * @see uninstall_plugin()
  *
  * @package    mod_livewebinar
- * @copyright  LiveWebinar by RTCLAB Sp. z o.o.  
+ * @copyright  LiveWebinar by RTCLAB Sp. z o.o.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Custom uninstallation procedure
  */

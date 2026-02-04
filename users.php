@@ -1,13 +1,36 @@
 <?php
+// This file is part of the livewebinar plugin for Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-require_once("../../config.php");
+/**
+ * LiveWebinar users administration page.
+ *
+ * @package    mod_livewebinar
+ * @copyright  LiveWebinar by RTCLAB Sp. z o.o.
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+require_once(__DIR__ . '/../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
-require_once("lib.php");
-require_once(dirname(__FILE__) . '/mod_form.php');
 
-admin_externalpage_setup('managemodules'); // this is hacky, tehre should be a special hidden page for it
+// This is hacky; there should be a special hidden page for it.
+admin_externalpage_setup('managemodules');
 
-$page = optional_param('page', 1, PARAM_INTEGER);
+require_once(__DIR__ . '/lib.php');
+
+$page = optional_param('page', 1, PARAM_INT);
 
 $isadmin = false;
 $admins = get_admins();
@@ -23,39 +46,44 @@ if (!$isadmin) {
 
 $url = new moodle_url('/mod/livewebinar/users.php');
 $PAGE->set_url($url);
-$PAGE->set_title(get_string("users", "mod_livewebinar"));
+$PAGE->set_title(get_string('users', 'mod_livewebinar'));
 
-$strmodulename = get_string("modulename", "mod_livewebinar");
+$strmodulename = get_string('modulename', 'mod_livewebinar');
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading($strmodulename . ': ' . get_string("users", "mod_livewebinar"));
+echo $OUTPUT->heading($strmodulename . ': ' . get_string('users', 'mod_livewebinar'));
 
 $recordsperpage = 100;
-//$extraselect = 'id IN (SELECT distinct userid FROM {role_assignments} a WHERE a.roleid < :ex_courserole1_roleid)';
-//$extraparams = array('ex_courserole1_roleid'=>5);
-$extraselect = "id IN (SELECT distinct userid FROM mdl_role_assignments a, mdl_role r WHERE a.roleid = r.id AND r.archetype in ('manager','coursecreator','editingteacher','teacher'))";
-$extraparams = array();
+$extraselect = "id IN (SELECT DISTINCT userid
+                  FROM {role_assignments} a
+                  JOIN {role} r ON r.id = a.roleid
+                 WHERE r.archetype IN ('manager', 'coursecreator', 'editingteacher', 'teacher'))";
+$extraparams = [];
 
-$userCount = get_users(false, "", false, [], 'email ASC', '', '', $page - 1, $recordsperpage, 'id,email,lastname,firstname',$extraselect,$extraparams);
-$pageCount = (int) ($userCount / $recordsperpage);
+$usercount = get_users(false, '', false, [], 'email ASC', '', '', $page - 1, $recordsperpage,
+    'id,email,lastname,firstname', $extraselect, $extraparams);
+$pagecount = (int) ($usercount / $recordsperpage);
 
-
-
-$users = get_users(true, "", false, [], 'email ASC', '', '', $page - 1, $recordsperpage, 'id,email,lastname,firstname',$extraselect,$extraparams);
+$users = get_users(true, '', false, [], 'email ASC', '', '', $page - 1, $recordsperpage,
+    'id,email,lastname,firstname', $extraselect, $extraparams);
 $str = '<div class="no-overflow"><table class="admintable generaltable" id="livewebinarusers">';
 foreach ($users as $user) {
-    $eicon = "<a title=\"" . get_string("edit") . "\" href=\"$CFG->wwwroot/mod/livewebinar/user.php?id={$user->id}&amp;email={$user->email}&amp;sesskey=" . sesskey() . "\">";
+    $eicon = '<a title="' . get_string('edit') . '" href="' . $CFG->wwwroot .
+        '/mod/livewebinar/user.php?id=' . $user->id . '&amp;email=' . $user->email .
+        '&amp;sesskey=' . sesskey() . '">';
     $eicon .= $OUTPUT->pix_icon('t/edit', get_string('edit'));
     $str .= '<tr>';
-    $str .= '<td>' . "{$eicon} {$user->lastname} {$user->firstname} ({$user->email})" . '</a></td>';
+    $str .= '<td>' . "{$eicon} {$user->lastname} {$user->firstname} ({$user->email})" .
+        '</a></td>';
     $str .= '</tr>';
 }
 $str .= '</table></div>';
 echo $str;
 
-if ($userCount > $recordsperpage) {
-    for ($i = 1; $i <= $pageCount; $i++) {
-        echo "<a href=\"$CFG->wwwroot/mod/livewebinar/users.php?page={$i}&amp;sesskey=" . sesskey() . "\">{$i}</a>&nbsp;&nbsp;";
+if ($usercount > $recordsperpage) {
+    for ($i = 1; $i <= $pagecount; $i++) {
+        echo '<a href="' . $CFG->wwwroot . '/mod/livewebinar/users.php?page=' . $i .
+            '&amp;sesskey=' . sesskey() . "\">{$i}</a>&nbsp;&nbsp;";
     }
 }
 

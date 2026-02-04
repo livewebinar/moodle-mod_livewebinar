@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of the livewebinar plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -19,21 +18,18 @@
  * The mod_livewebinar instance list viewed event.
  *
  * @package    mod_livewebinar
- * @copyright  LiveWebinar by RTCLAB Sp. z o.o. 
+ * @copyright  LiveWebinar by RTCLAB Sp. z o.o.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_livewebinar\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The mod_livewebinar instance list viewed event class.
  *
  * @package    mod_livewebinar
- * @copyright  LiveWebinar by RTCLAB Sp. z o.o. 
+ * @copyright  LiveWebinar by RTCLAB Sp. z o.o.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class course_module_instance_list_viewed extends \core\event\course_module_instance_list_viewed {
-
 }

@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of the LiveWebinar plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -20,7 +19,7 @@
  *
  * @package   mod_livewebinar
  * @category  backup
- * @copyright LiveWebinar by RTCLAB Sp. z o.o. 
+ * @copyright LiveWebinar by RTCLAB Sp. z o.o.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die;
@@ -32,22 +31,20 @@ require_once($CFG->dirroot . '/mod/livewebinar/backup/moodle2/backup_livewebinar
  *
  * @package   mod_livewebinar
  * @category  backup
- * @copyright LiveWebinar by RTCLAB Sp. z o.o. 
+ * @copyright LiveWebinar by RTCLAB Sp. z o.o.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class backup_livewebinar_activity_task extends backup_activity_task {
-
     /**
      * No specific settings for this activity
      */
     protected function define_my_settings() {
-
     }
 
     /**
- * Defines a backup step to store the instance data in the livewebinar.xml file
- */
-protected function define_my_steps() {
+     * Defines a backup step to store the instance data in the livewebinar.xml file
+     */
+    protected function define_my_steps() {
         $this->add_step(new backup_livewebinar_activity_structure_step('livewebinar_structure', 'livewebinar.xml'));
     }
 
@@ -57,7 +54,7 @@ protected function define_my_steps() {
      * @param string $content some HTML text that eventually contains URLs to the activity instance scripts
      * @return string the content with the URLs encoded
      */
-    static public function encode_content_links($content) {
+    public static function encode_content_links($content) {
         global $CFG;
 
         $base = preg_quote($CFG->wwwroot, '/');

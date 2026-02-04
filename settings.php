@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of the livewebinar plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -30,7 +29,8 @@ if ($ADMIN->fulltree) {
     $settings = new admin_settingpage('modsettinglivewebinar', get_string('pluginname', 'mod_livewebinar'));
 
     // Test connection if it is setup and user is on the settings page.
-    if (!CLI_SCRIPT && $PAGE->url == $CFG->wwwroot . '/' . $CFG->admin . '/settings.php?section=modsettinglivewebinar') {
+    if (!CLI_SCRIPT &&
+        $PAGE->url == $CFG->wwwroot . '/' . $CFG->admin . '/settings.php?section=modsettinglivewebinar') {
         $status = get_string('connectionok', 'mod_livewebinar');
         $notifyclass = 'notifysuccess';
         $service = new mod_livewebinar_client();
@@ -41,32 +41,53 @@ if ($ADMIN->fulltree) {
             $status = $service->lasterror;
             $notifyclass = 'notifyproblem';
         }
-        $statusmessage = $OUTPUT->notification(get_string('connectionstatus', 'mod_livewebinar') . ': ' . $status, $notifyclass);
+        $statusmessage = $OUTPUT->notification(get_string('connectionstatus', 'mod_livewebinar') . ': ' . $status,
+            $notifyclass);
         $connectionstatus = new admin_setting_heading('mod_livewebinar/connectionstatus', $statusmessage, '');
         $settings->add($connectionstatus);
     }
 
-    $register = new admin_setting_heading('mod_livewebinar/register', "", get_string('register_txt', 'mod_livewebinar'));
+    $register = new admin_setting_heading('mod_livewebinar/register', '', get_string('register_txt', 'mod_livewebinar'));
     $settings->add($register);
 
-    $identifier = new \mod_livewebinar\admin\setting_configtext_required('mod_livewebinar/identifier', get_string('identifier', 'mod_livewebinar'), get_string('identifier_desc', 'mod_livewebinar'), '', PARAM_ALPHANUMEXT);
+    $identifier = new \mod_livewebinar\admin\setting_configtext_required('mod_livewebinar/identifier',
+        get_string('identifier', 'mod_livewebinar'),
+        get_string('identifier_desc', 'mod_livewebinar'),
+        '',
+        PARAM_ALPHANUMEXT);
     $settings->add($identifier);
 
-    $clientId = new \mod_livewebinar\admin\setting_configtext_required('mod_livewebinar/client_id', get_string('client_id', 'mod_livewebinar'), get_string('client_id_desc', 'mod_livewebinar'), '', PARAM_ALPHANUMEXT);
-    $settings->add($clientId);
+    $clientid = new \mod_livewebinar\admin\setting_configtext_required('mod_livewebinar/client_id',
+        get_string('client_id', 'mod_livewebinar'),
+        get_string('client_id_desc', 'mod_livewebinar'),
+        '',
+        PARAM_ALPHANUMEXT);
+    $settings->add($clientid);
 
-    $clientSecret = new \mod_livewebinar\admin\setting_configtext_required('mod_livewebinar/client_secret', get_string('client_secret', 'mod_livewebinar'), get_string('client_secret_desc', 'mod_livewebinar'), '', PARAM_ALPHANUMEXT);
-    $settings->add($clientSecret);
+    $clientsecret = new \mod_livewebinar\admin\setting_configtext_required('mod_livewebinar/client_secret',
+        get_string('client_secret', 'mod_livewebinar'),
+        get_string('client_secret_desc', 'mod_livewebinar'),
+        '',
+        PARAM_ALPHANUMEXT);
+    $settings->add($clientsecret);
 
-//    $username = new admin_setting_configtext('mod_livewebinar/username', get_string('username', 'mod_livewebinar'), get_string('username_desc', 'mod_livewebinar'), '');
-//    $settings->add($username);
-//
-//    $password = new admin_setting_configtext('mod_livewebinar/password', get_string('password', 'mod_livewebinar'), get_string('password_desc', 'mod_livewebinar'), '');
-//    $settings->add($password);
+    /*
+    $username = new admin_setting_configtext('mod_livewebinar/username',
+        get_string('username', 'mod_livewebinar'),
+        get_string('username_desc', 'mod_livewebinar'),
+        '');
+    $settings->add($username);
 
-    $users_label = get_string("users", 'mod_livewebinar');
+    $password = new admin_setting_configtext('mod_livewebinar/password',
+        get_string('password', 'mod_livewebinar'),
+        get_string('password_desc', 'mod_livewebinar'),
+        '');
+    $settings->add($password);
+    */
+
+    $userslabel = get_string('users', 'mod_livewebinar');
     $url = "$CFG->wwwroot/mod/livewebinar/users.php?sesskey=" . sesskey();
-    $viconlink = "<a title=\"{$users_label}\" href=\"$url\">{$users_label}</a>";
+    $viconlink = '<a title="' . $userslabel . '" href="' . $url . '">' . $userslabel . '</a>';
 
-    $settings->add(new admin_setting_heading('userConfig', "", $viconlink));
+    $settings->add(new admin_setting_heading('userConfig', '', $viconlink));
 }

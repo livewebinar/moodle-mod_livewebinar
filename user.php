@@ -1,9 +1,9 @@
 <?php
 
-require_once("../../config.php");
+require_once(__DIR__ . '/../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
-require_once("lib.php");
-require_once(dirname(__FILE__) . '/mod_form.php');
+require_once(__DIR__ . '/lib.php');
+require_once(__DIR__ . '/user_form.php');
 
 
 admin_externalpage_setup('managemodules'); // this is hacky, tehre should be a special hidden page for it
@@ -44,4 +44,3 @@ if ($formdata) {
     echo $dateform->render();
     echo $OUTPUT->footer();
 }
-

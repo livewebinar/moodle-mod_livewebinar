@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of the livewebinar plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -29,7 +28,6 @@ $string['modulename'] = 'LiveWebinar Meeting';
 $string['modulenameplural'] = 'LiveWebinar Meeting';
 $string['pluginadministration'] = 'Manage LiveWebinar Meeting';
 $string['livewebinar:addinstance'] = 'Add a LiveWebinar Meeting instance';
-//
 $string['register_txt'] = '';
 $string['authorization'] = 'Authorization';
 $string['identifier'] = 'Identifier';
@@ -43,7 +41,6 @@ $string['username_desc'] = 'Available in LiveWebinar panel';
 $string['password'] = 'Password';
 $string['password_desc'] = 'Available in LiveWebinar panel';
 $string['errorapinotconfigured'] = 'LiveWebinar API credentials are not configured.';
-//
 $string['connectionok'] = 'You are connected';
 $string['connectionstatus'] = 'Connection status';
 $string['credentials_managed_globally'] = 'LiveWebinar API credentials are managed in the plugin settings.';
@@ -51,7 +48,6 @@ $string['credentials_missing'] = 'Configure LiveWebinar identifier, client id an
 $string['credentials_invalid'] = 'LiveWebinar credentials are invalid: {$a}';
 $string['identifier_missing'] = 'Identifier is required. Configure the LiveWebinar identifier in plugin settings.';
 $string['setting_required'] = 'This value is required.';
-//
 $string['topic'] = 'Topic';
 $string['description'] = 'Description';
 $string['start_time'] = 'Start Time';
@@ -67,14 +63,11 @@ $string['open'] = 'Room open all the time';
 $string['join_meeting'] = 'Join Meeting';
 $string['minutes_to_join'] = 'You can join in minutes';
 $string['recordings'] = 'Recordings';
-//
 $string['err_password'] = 'Password may only contain the following characters: [a-z A-Z 0-9 @ - _ *]. Max of 10 characters.';
 $string['err_start_time_past'] = 'The start date cannot be in the past.';
 $string['err_duration_nonpositive'] = 'Set the duration';
 $string['err_duration_too_long'] = 'The duration cannot exceed 150 hours.';
-//
 $string['updatewidgets'] = 'Update meetings';
-//
 $string['users'] = 'Users';
 $string['save'] = 'Save';
 $string['livewebinar:view'] = 'View Nowa lekcja online meetings';

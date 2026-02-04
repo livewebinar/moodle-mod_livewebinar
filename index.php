@@ -14,7 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * LiveWebinar index page.
+ *
+ * @package    mod_livewebinar
+ * @copyright  LiveWebinar by RTCLAB Sp. z o.o.
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 require(__DIR__ . '/../../config.php');
+require_login();
 
 $id = optional_param('id', 0, PARAM_INT);
 

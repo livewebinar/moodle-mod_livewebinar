@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of the livewebinar plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -24,25 +23,25 @@
  */
 defined('MOODLE_INTERNAL') || die;
 
-$definitions = array(
-    'access_token' => array(
+$definitions = [
+    'access_token' => [
         'mode' => cache_store::MODE_APPLICATION,
-        'ttl' => 300
-    ),
-    'widget' => array(
+        'ttl' => 300,
+    ],
+    'widget' => [
         'mode' => cache_store::MODE_APPLICATION,
-        'ttl' => 300
-    ),
-    'recordings' => array(
+        'ttl' => 300,
+    ],
+    'recordings' => [
         'mode' => cache_store::MODE_APPLICATION,
-        'ttl' => 300
-    ),
-    'widget_token' => array(
+        'ttl' => 300,
+    ],
+    'widget_token' => [
         'mode' => cache_store::MODE_APPLICATION,
-        'ttl' => 300
-    ),
-    'user_widget_token' => array(
+        'ttl' => 300,
+    ],
+    'user_widget_token' => [
         'mode' => cache_store::MODE_APPLICATION,
-        'ttl' => 300
-    )
-);
+        'ttl' => 300,
+    ],
+];

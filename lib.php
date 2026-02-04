@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of the livewebinar plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -29,8 +28,6 @@
  * @copyright  LiveWebinar by RTCLAB Sp. z o.o.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
-
 /* Moodle core API */
 
 /**
@@ -73,11 +70,9 @@ function livewebinar_supports($feature) {
  * @param mod_livewebinar_mod_form $mform The form instance itself (if needed)
  * @return int The id of the newly inserted livewebinar record
  */
-function livewebinar_add_instance(stdClass $livewebinar, mod_livewebinar_mod_form $mform = null) {
+function livewebinar_add_instance(stdClass $livewebinar, ?mod_livewebinar_mod_form $mform = null) {
     global $CFG, $DB, $USER;
     require_once($CFG->dirroot . '/mod/livewebinar/classes/client.php');
-
-
     $auth = livewebinar_get_auth_item($USER->id);
 
     if (empty($auth->client_id) || empty($auth->client_secret) || empty($auth->identifier)) {
@@ -94,14 +89,14 @@ function livewebinar_add_instance(stdClass $livewebinar, mod_livewebinar_mod_for
     $service = new mod_livewebinar_client();
 
     try {
-        $widget_id = $service->widget_create($auth, $livewebinar, $USER->id);
+        $widgetid = $service->widget_create($auth, $livewebinar, $USER->id);
     } catch (moodle_exception $e) {
         livewebinar_print_error($service->lasterror);
     }
 
     // Create widget in database.
     $livewebinar->timemodified = time();
-    $livewebinar->widget_id = $widget_id;
+    $livewebinar->widget_id = $widgetid;
     $livewebinar->user_id = $USER->id;
     $livewebinar->id = $DB->insert_record('livewebinar', $livewebinar);
 
@@ -119,7 +114,7 @@ function livewebinar_add_instance(stdClass $livewebinar, mod_livewebinar_mod_for
  * @param mod_livewebinar_mod_form $mform The form instance itself (if needed)
  * @return boolean Success/Fail
  */
-function livewebinar_update_instance(stdClass $livewebinar, mod_livewebinar_mod_form $mform = null) {
+function livewebinar_update_instance(stdClass $livewebinar, ?mod_livewebinar_mod_form $mform = null) {
     global $CFG, $DB, $USER;
     require_once($CFG->dirroot . '/mod/livewebinar/classes/client.php');
     $livewebinar->id = $livewebinar->instance;
@@ -166,7 +161,7 @@ function livewebinar_delete_instance($id) {
     global $CFG, $DB;
     require_once($CFG->dirroot . '/mod/livewebinar/classes/client.php');
 
-    if (!$livewebinar = $DB->get_record('livewebinar', array('id' => $id))) {
+    if (!$livewebinar = $DB->get_record('livewebinar', ['id' => $id])) {
         return false;
     }
 
@@ -179,7 +174,7 @@ function livewebinar_delete_instance($id) {
             livewebinar_print_error($service->lasterror);
         }
     }
-    $DB->delete_records('livewebinar', array('id' => $livewebinar->id));
+    $DB->delete_records('livewebinar', ['id' => $livewebinar->id]);
 
     return true;
 }
@@ -187,14 +182,14 @@ function livewebinar_delete_instance($id) {
 /**
  * Get auth settings.
  *
- * @param int $user_id
+ * @param int $userid
  */
-function livewebinar_get_auth_item($user_id) {
+function livewebinar_get_auth_item($userid) {
     global $DB;
-    $auth = $DB->get_record('livewebinar_users', array('user_id' => $user_id));
+    $auth = $DB->get_record('livewebinar_users', ['user_id' => $userid]);
     if (!$auth) {
         $auth = new stdClass();
-        $auth->user_id = $user_id;
+        $auth->user_id = $userid;
     }
     $config = get_config('mod_livewebinar');
     if (!empty($config->client_id)) {
@@ -217,9 +212,7 @@ function livewebinar_get_auth_item($user_id) {
 function livewebinar_update_auth_item(stdClass $auth) {
     global $DB;
 
-    $authid = $DB->get_field('livewebinar_users', 'id', array(
-                'user_id' => $auth->user_id
-                ));
+    $authid = $DB->get_field('livewebinar_users', 'id', ['user_id' => $auth->user_id]);
 
     if ($authid) {
         $auth->id = $authid;
@@ -232,16 +225,16 @@ function livewebinar_update_auth_item(stdClass $auth) {
  * Print a user-friendly error message when a livewebinar API call errors, or fall back to a generic error message.
  *
  * @param string $error Error message (most likely from mod_livewebinar_webservice->lasterror)
- * @param int $fromApiRTC Whether the error originated from RTC API calls
+ * @param int $fromapirtc Whether the error originated from RTC API calls
  * @param array $csett Optional cURL settings for debugging
  * @return void
  */
-function livewebinar_print_error($error, $fromApiRTC=0, $csett=array()) {
+function livewebinar_print_error($error, int $fromapirtc = 0, array $csett = []) {
     global $CFG, $COURSE, $OUTPUT, $PAGE;
 
-    $fromRTC = '';
-    if($fromApiRTC) {
-        $fromRTC = ' Api RTC';
+    $fromrtc = '';
+    if ($fromapirtc) {
+        $fromrtc = ' Api RTC';
     }
 
     if (isset($_SERVER['HTTP_REFERER'])) {
@@ -254,11 +247,16 @@ function livewebinar_print_error($error, $fromApiRTC=0, $csett=array()) {
     $PAGE->set_heading($COURSE->fullname);
     echo $OUTPUT->header();
 
-    echo $OUTPUT->notification("<strong>" . get_string('error') . "$fromRTC:</strong> $error", 'notifytiny');
+    echo $OUTPUT->notification('<strong>' . get_string('error') . $fromrtc . ':</strong> ' . $error, 'notifytiny');
     if ($CFG->debugdeveloper) {
-        echo $OUTPUT->notification('<strong>Stack trace:</strong> ' . format_backtrace(debug_backtrace()), 'notifytiny');
-        if(sizeof($csett)) {
-            echo $OUTPUT->notification('<strong>RTC cURL request:</strong><pre> ' .print_r($csett,1).'</pre>');
+        echo $OUTPUT->notification('<strong>Stack trace:</strong> ' . format_backtrace(), 'notifytiny');
+        if (count($csett)) {
+            $curlsettings = json_encode($csett, JSON_PRETTY_PRINT);
+            if ($curlsettings === false) {
+                $curlsettings = '';
+            }
+            $curlsettings = s($curlsettings);
+            echo $OUTPUT->notification('<strong>RTC cURL request:</strong><pre>' . $curlsettings . '</pre>');
         }
     }
     echo $OUTPUT->continue_button($nexturl);

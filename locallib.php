@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of the livewebinar plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -41,19 +40,20 @@ require_once($CFG->dirroot . '/mod/livewebinar/classes/client.php');
 function livewebinar_get_instance_setup() {
     global $DB;
 
-    $id = optional_param('id', 0, PARAM_INT); // Course_module ID, or
-    $n = optional_param('n', 0, PARAM_INT);  // ... livewebinar instance ID - it should be named as the first character of the module.
+    $id = optional_param('id', 0, PARAM_INT); // Course_module ID.
+    $n = optional_param('n', 0, PARAM_INT);
+    // Livewebinar instance ID - it should be named as the first character of the module.
 
     if ($id) {
         $cm = get_coursemodule_from_id('livewebinar', $id, 0, false, MUST_EXIST);
-        $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
-        $livewebinar = $DB->get_record('livewebinar', array('id' => $cm->instance), '*', MUST_EXIST);
+        $course = $DB->get_record('course', ['id' => $cm->course], '*', MUST_EXIST);
+        $livewebinar = $DB->get_record('livewebinar', ['id' => $cm->instance], '*', MUST_EXIST);
     } else if ($n) {
-        $livewebinar = $DB->get_record('livewebinar', array('id' => $n), '*', MUST_EXIST);
-        $course = $DB->get_record('course', array('id' => $livewebinar->course), '*', MUST_EXIST);
+        $livewebinar = $DB->get_record('livewebinar', ['id' => $n], '*', MUST_EXIST);
+        $course = $DB->get_record('course', ['id' => $livewebinar->course], '*', MUST_EXIST);
         $cm = get_coursemodule_from_instance('livewebinar', $livewebinar->id, $course->id, false, MUST_EXIST);
     } else {
-        print_error('You must specify a course_module ID or an instance ID');
+        throw new moodle_exception('invalidcoursemodule');
     }
 
     require_login($course, true, $cm);
@@ -61,5 +61,5 @@ function livewebinar_get_instance_setup() {
     $context = context_module::instance($cm->id);
     require_capability('mod/livewebinar:view', $context);
 
-    return array($course, $cm, $livewebinar);
+    return [$course, $cm, $livewebinar];
 }

@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of the LiveWebinar plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -16,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Web service related unit tests
+ * Web service related unit tests.
  *
  * @package    mod_livewebinar
  * @copyright  LiveWebinar by RTCLAB Sp. z o.o.
@@ -26,14 +25,16 @@ defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
 
+namespace mod_livewebinar;
+
 /**
- * PHPunit testcase class.
+ * PHPUnit testcase class.
  *
+ * @coversNothing
  * @copyright  LiveWebinar by RTCLAB Sp. z o.o.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class createwidget_test extends advanced_testcase {
-
+class createwidget_test extends \advanced_testcase {
     /**
      * Setup webservice mocking.
      */
@@ -48,5 +49,4 @@ class createwidget_test extends advanced_testcase {
     public function test_create() {
         $this->assertTrue(true);
     }
-
 }

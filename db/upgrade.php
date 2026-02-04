@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of the livewebinar plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -26,11 +25,9 @@
  * here will all be database-neutral, using the functions defined in DLL libraries.
  *
  * @package    mod_livewebinar
- * @copyright  LiveWebinar by RTCLAB Sp. z o.o.  
+ * @copyright  LiveWebinar by RTCLAB Sp. z o.o.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Execute livewebinar upgrade from the given old version
  *
@@ -39,8 +36,5 @@ defined('MOODLE_INTERNAL') || die();
  */
 function xmldb_livewebinar_upgrade($oldversion) {
     global $DB;
-
-
-
     return true;
 }

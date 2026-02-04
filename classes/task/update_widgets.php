@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of the livewebinar plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,24 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Library of interface functions and constants for module livewebinar
- *
- * All the core Moodle functions, neeeded to allow the module to work
- * integrated in Moodle should be placed here.
- *
- * All the livewebinar specific functions, needed to implement all the module
- * logic, should go to locallib.php. This will help to save some memory when
- * Moodle is performing actions across all modules.
- *
- * @package    mod_livewebinar
- * @copyright  LiveWebinar by RTCLAB Sp. z o.o.
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace mod_livewebinar\task;
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Scheduled task to sychronize widget data.
@@ -42,7 +24,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class update_widgets extends \core\task\scheduled_task {
-
     /**
      * Returns name of task.
      *
@@ -59,10 +40,6 @@ class update_widgets extends \core\task\scheduled_task {
      */
     public function execute() {
         global $DB;
-
-
-
         return true;
     }
-
 }

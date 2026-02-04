@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of the livewebinar plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -41,32 +40,32 @@
  * The variable name for the capability definitions array is $capabilities
  *
  * @package    mod_livewebinar
- * @copyright  LiveWebinar by RTCLAB Sp. z o.o.  
+ * @copyright  LiveWebinar by RTCLAB Sp. z o.o.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
 
 // Modify capabilities as needed and remove this comment.
-$capabilities = array(
-        'mod/livewebinar:addinstance' => array(
-            'riskbitmask' => RISK_XSS,
-            'captype' => 'write',
-            'contextlevel' => CONTEXT_COURSE,
-            'archetypes' => array(
-                'editingteacher' => CAP_ALLOW,
-                'manager' => CAP_ALLOW
-                ),
-            'clonepermissionsfrom' => 'moodle/course:manageactivities'
-            ),
-        'mod/livewebinar:view' => array(
-            'captype' => 'read',
-            'contextlevel' => CONTEXT_MODULE,
-            'legacy' => array(
-                'guest' => CAP_ALLOW,
-                'student' => CAP_ALLOW,
-                'teacher' => CAP_ALLOW,
-                'editingteacher' => CAP_ALLOW,
-                'manager' => CAP_ALLOW
-                )
-            ),
-        );
+$capabilities = [
+    'mod/livewebinar:addinstance' => [
+        'riskbitmask' => RISK_XSS,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => [
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
+        ],
+        'clonepermissionsfrom' => 'moodle/course:manageactivities',
+    ],
+    'mod/livewebinar:view' => [
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_MODULE,
+        'legacy' => [
+            'guest' => CAP_ALLOW,
+            'student' => CAP_ALLOW,
+            'teacher' => CAP_ALLOW,
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+];

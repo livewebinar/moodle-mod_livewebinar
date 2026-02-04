@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of the LiveWebinar plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -20,7 +19,7 @@
  *
  * @package   mod_livewebinar
  * @category  backup
- * @copyright  LiveWebinar by RTCLAB Sp. z o.o. 
+ * @copyright  LiveWebinar by RTCLAB Sp. z o.o.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
@@ -34,11 +33,10 @@ require_once($CFG->dirroot . '/mod/livewebinar/backup/moodle2/restore_livewebina
  *
  * @package   mod_livewebinar
  * @category  backup
- * @copyright  LiveWebinar by RTCLAB Sp. z o.o. 
+ * @copyright  LiveWebinar by RTCLAB Sp. z o.o.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_livewebinar_activity_task extends restore_activity_task {
-
     /**
      * Define (add) particular settings this activity can have
      */
@@ -58,10 +56,10 @@ class restore_livewebinar_activity_task extends restore_activity_task {
      * Define the contents in the activity that must be
      * processed by the link decoder
      */
-    static public function define_decode_contents() {
-        $contents = array();
+    public static function define_decode_contents() {
+        $contents = [];
 
-        $contents[] = new restore_decode_content('livewebinar', array('intro'), 'livewebinar');
+        $contents[] = new restore_decode_content('livewebinar', ['intro'], 'livewebinar');
 
         return $contents;
     }
@@ -70,8 +68,8 @@ class restore_livewebinar_activity_task extends restore_activity_task {
      * Define the decoding rules for links belonging
      * to the activity to be executed by the link decoder
      */
-    static public function define_decode_rules() {
-        $rules = array();
+    public static function define_decode_rules() {
+        $rules = [];
 
         $rules[] = new restore_decode_rule('LIVEWEBINARVIEWBYID', '/mod/livewebinar/view.php?id=$1', 'course_module');
         $rules[] = new restore_decode_rule('LIVEWEBINARINDEX', '/mod/livewebinar/index.php?id=$1', 'course_module');
@@ -85,8 +83,8 @@ class restore_livewebinar_activity_task extends restore_activity_task {
      * livewebinar logs. It must return one array
      * of restore_log_rule objects.
      */
-    static public function define_restore_log_rules() {
-        $rules = array();
+    public static function define_restore_log_rules() {
+        $rules = [];
 
         $rules[] = new restore_log_rule('livewebinar', 'add', 'view.php?id={course_module}', '{livewebinar}');
         $rules[] = new restore_log_rule('livewebinar', 'update', 'view.php?id={course_module}', '{livewebinar}');
@@ -105,8 +103,8 @@ class restore_livewebinar_activity_task extends restore_activity_task {
      * by the restore final task, but are defined here at
      * activity level. All them are rules not linked to any module instance (cmid = 0)
      */
-    static public function define_restore_log_rules_for_course() {
-        $rules = array();
+    public static function define_restore_log_rules_for_course() {
+        $rules = [];
 
         $rules[] = new restore_log_rule('livewebinar', 'view all', 'index.php?id={course}', null);
 

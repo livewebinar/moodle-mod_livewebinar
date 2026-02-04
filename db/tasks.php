@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of the livewebinar plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -24,14 +23,14 @@
  */
 defined('MOODLE_INTERNAL') || die;
 
-$tasks = array(
-        array(
-            'classname' => 'mod_livewebinar\task\update_widgets',
-            'blocking' => 0,
-            'minute' => '0',
-            'hour' => '0',
-            'day' => '*',
-            'month' => '*',
-            'dayofweek' => '*'
-            )
-        );
+$tasks = [
+    [
+        'classname' => 'mod_livewebinar\task\update_widgets',
+        'blocking' => 0,
+        'minute' => '0',
+        'hour' => '0',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+    ],
+];

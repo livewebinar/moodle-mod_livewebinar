@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of the livewebinar plugin for Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -19,18 +18,15 @@
  * Provides code to be executed during the module installation.
  *
  * @package    mod_livewebinar
- * @copyright  LiveWebinar by RTCLAB Sp. z o.o.  
+ * @copyright  LiveWebinar by RTCLAB Sp. z o.o.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Post installation procedure
  *
  * @see upgrade_plugins_modules()
  */
 function xmldb_livewebinar_install() {
-
 }
 
 /**
@@ -39,5 +35,4 @@ function xmldb_livewebinar_install() {
  * @see upgrade_plugins_modules()
  */
 function xmldb_livewebinar_install_recovery() {
-
 }
