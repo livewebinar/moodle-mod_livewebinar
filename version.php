@@ -24,8 +24,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_livewebinar';
-$plugin->version = 2026011901; // REMEMBER TO INCREASE EVERY UPDATE release !!!
-$plugin->release = '1.0.1';
+$plugin->version = 2026011902; // REMEMBER TO INCREASE EVERY UPDATE release !!!
+$plugin->release = '1.0.2';
 $plugin->requires = 2022112800; // 2017111300
 $plugin->maturity = MATURITY_STABLE;
 $plugin->cron = 0;
